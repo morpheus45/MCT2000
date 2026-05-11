@@ -64,25 +64,42 @@ Redémarre `npm run dev` — chat & feed sont maintenant fonctionnels.
 
 ---
 
-## Déployer sur Vercel (gratuit)
+## Déployer sur GitHub Pages (recommandé)
 
-1. Pousse le repo sur GitHub (voir ci-dessous).
-2. Sur [vercel.com](https://vercel.com) → **Add New… → Project** → importe le repo.
-3. Dans **Environment Variables**, colle les deux variables `NEXT_PUBLIC_SUPABASE_*`.
-4. **Deploy**. Vercel détecte Next.js automatiquement.
+Le projet est pré-configuré pour `https://<user>.github.io/MCT2000/` :
+- `next.config.js` → `output: "export"` + `basePath: "/MCT2000"`
+- `.github/workflows/deploy.yml` → build + push automatique vers GitHub Pages
 
----
-
-## Pousser sur GitHub
+### 1. Créer le repo et pousser
 
 ```bash
-git init
-git add .
-git commit -m "MCT2000 — initial commit"
-gh repo create mct2000 --public --source=. --remote=origin --push
+# Depuis le dossier MCT2000/
+gh repo create MCT2000 --public --source=. --remote=origin --push
+# ou manuellement :
+#   git remote add origin https://github.com/<user>/MCT2000.git
+#   git push -u origin main
 ```
 
-(ou manuellement, créer le repo sur github.com puis `git remote add origin … && git push -u origin main`).
+### 2. Activer Pages
+
+Repo → **Settings** → **Pages** → **Source : GitHub Actions**.
+
+### 3. Ajouter les secrets Supabase
+
+Repo → **Settings** → **Secrets and variables** → **Actions** → **New repository secret** (×2) :
+
+| Name | Value |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://xxx.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `ey...` |
+
+Re-déclenche le workflow (**Actions → Deploy → Run workflow**) ou pousse un commit — le site sera live à **`https://<user>.github.io/MCT2000/`**.
+
+### Alternative — Vercel (plus simple, sans basePath)
+
+1. [vercel.com](https://vercel.com) → **Import** ce repo.
+2. **Environment Variables** : `NEXT_PUBLIC_SUPABASE_*` **et** `NEXT_PUBLIC_BASE_PATH=""` (chaîne vide).
+3. Deploy.
 
 ---
 
