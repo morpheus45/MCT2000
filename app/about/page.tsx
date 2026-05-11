@@ -1,4 +1,4 @@
-export const metadata = { title: "L'histoire · MCT2000" };
+export const metadata = { title: "L'histoire · Moto Club MCT 2000" };
 
 export default function AboutPage() {
   return (
@@ -7,7 +7,7 @@ export default function AboutPage() {
       <h1 className="heading text-6xl">Depuis l'an 2000.</h1>
       <div className="mt-8 space-y-6 text-lg leading-relaxed text-white/80">
         <p>
-          MCT2000 est né dans un garage en 2000 — cinq potes, deux Bonneville, une Ducati, un café
+          Le Moto Club MCT 2000 est né dans un garage en l'an 2000 — quelques potes, deux Bonneville, une Ducati, un café
           serré et une carte de France punaisée au mur. L'idée était simple : rouler ensemble, sans
           chichis, sans hiérarchie, sans cotisation.
         </p>

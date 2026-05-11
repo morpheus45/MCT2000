@@ -4,11 +4,11 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "MCT2000 — Motorcycle Club",
+  title: "Moto Club MCT 2000",
   description:
-    "Le club des motards MCT2000 — sorties, mécanique, brotherhood. Rejoins l'équipe.",
+    "Moto Club MCT 2000 — sorties, mécanique, brotherhood. Rejoins l'équipe.",
   openGraph: {
-    title: "MCT2000",
+    title: "Moto Club MCT 2000",
     description: "Brotherhood. Bitume. Liberté.",
     type: "website",
   },

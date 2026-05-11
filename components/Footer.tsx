@@ -8,10 +8,10 @@ export default function Footer() {
         <div>
           <div className="flex items-center gap-2">
             <Flame className="h-5 w-5 text-flame-500" />
-            <span className="heading text-xl tracking-[0.2em] gradient-text">MCT2000</span>
+            <span className="heading text-xl tracking-[0.2em] gradient-text">MCT 2000</span>
           </div>
           <p className="mt-3 text-sm text-white/50">
-            Brotherhood. Bitume. Liberté. Depuis 2000, on roule ensemble.
+            Moto Club MCT 2000 — Brotherhood. Bitume. Liberté. Depuis l'an 2000, on roule ensemble.
           </p>
         </div>
         <div>
@@ -20,7 +20,8 @@ export default function Footer() {
             <li><Link href="/about">L'histoire</Link></li>
             <li><Link href="/members">Membres</Link></li>
             <li><Link href="/events">Sorties</Link></li>
-            <li><Link href="/rides">Itinéraires</Link></li>
+            <li><Link href="/rides">Routes</Link></li>
+            <li><Link href="/gallery">Galerie</Link></li>
           </ul>
         </div>
         <div>
@@ -48,7 +49,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-white/5 px-5 py-5 text-center text-xs uppercase tracking-[0.3em] text-white/40">
-        © {new Date().getFullYear()} MCT2000 — Ride free, ride safe.
+        © {new Date().getFullYear()} Moto Club MCT 2000 — Ride free, ride safe.
       </div>
     </footer>
   );

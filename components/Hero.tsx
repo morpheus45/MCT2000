@@ -51,9 +51,9 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.15 }}
             className="mt-6 max-w-xl text-lg text-white/70"
           >
-            Le club <strong className="text-white">MCT2000</strong> rassemble depuis 2000 les passionnés de
-            deux-roues. Sorties dominicales, road-trips longue distance, mécanique partagée — et
-            surtout, une famille.
+            Le <strong className="text-white">Moto Club MCT 2000</strong> rassemble depuis l'an 2000 les
+            passionnés de deux-roues. Sorties dominicales, road-trips longue distance, mécanique
+            partagée — et surtout, une famille.
           </motion.p>
 
           <motion.div

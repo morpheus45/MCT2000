@@ -202,12 +202,58 @@ create policy comments_delete on public.post_comments for delete using (auth.uid
 -- Events
 drop policy if exists events_select on public.events;
 create policy events_select on public.events for select using (true);
-drop policy if exists events_insert on public.events;
-create policy events_insert on public.events for insert with check (auth.role() = 'authenticated');
 
+-- Helper : is current user an admin / officer ?
+create or replace function public.is_admin()
+returns boolean
+language sql stable security definer set search_path = public
+as $$
+  select coalesce(
+    (select role in ('admin','officer') from public.profiles where id = auth.uid()),
+    false
+  );
+$$;
+
+drop policy if exists events_admin_write on public.events;
+create policy events_admin_write on public.events
+  for all using (public.is_admin()) with check (public.is_admin());
+
+drop policy if exists rsvps_select on public.event_rsvps;
+create policy rsvps_select on public.event_rsvps for select using (true);
 drop policy if exists rsvps_all on public.event_rsvps;
 create policy rsvps_all on public.event_rsvps for all
   using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- View: events with rsvp count + my status
+create or replace view public.events_with_counts as
+  select
+    e.*,
+    coalesce((select count(*) from public.event_rsvps r where r.event_id = e.id and r.status = 'going'), 0)::int as going_count,
+    (select status from public.event_rsvps r
+       where r.event_id = e.id and r.user_id = auth.uid()) as my_status
+  from public.events e;
+
+-- ---------- Gallery ----------
+create table if not exists public.gallery_photos (
+  id uuid primary key default gen_random_uuid(),
+  image_url text not null,
+  caption text,
+  taken_at date,
+  added_by uuid references public.profiles(id) on delete set null,
+  created_at timestamptz default now()
+);
+
+alter table public.gallery_photos enable row level security;
+drop policy if exists gallery_select on public.gallery_photos;
+create policy gallery_select on public.gallery_photos for select using (true);
+drop policy if exists gallery_admin_write on public.gallery_photos;
+create policy gallery_admin_write on public.gallery_photos
+  for all using (public.is_admin()) with check (public.is_admin());
+
+-- Admins can also post on behalf of the club, edit messages, etc.
+drop policy if exists posts_admin_all on public.posts;
+create policy posts_admin_all on public.posts
+  for all using (public.is_admin()) with check (public.is_admin());
 
 -- ---------- Realtime ----------
 -- Make sure these tables emit realtime events
@@ -215,3 +261,8 @@ alter publication supabase_realtime add table public.messages;
 alter publication supabase_realtime add table public.posts;
 alter publication supabase_realtime add table public.post_likes;
 alter publication supabase_realtime add table public.events;
+alter publication supabase_realtime add table public.gallery_photos;
+
+-- ---------- Bootstrap: make first user an admin ----------
+-- Run AFTER you've signed up: replace the email and execute manually:
+-- update public.profiles set role = 'admin' where id = (select id from auth.users where email = 'TOI@example.com');

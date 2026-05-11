@@ -47,6 +47,9 @@ body::before {
   .chip {
     @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white/70;
   }
+  .input {
+    @apply w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-white outline-none focus:border-flame-500;
+  }
   .heading {
     @apply font-display tracking-wide uppercase;
   }

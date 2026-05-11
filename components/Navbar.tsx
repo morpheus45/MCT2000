@@ -3,15 +3,17 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Flame, MessageSquare, Calendar, Users, Newspaper, Map } from "lucide-react";
+import { Flame, MessageSquare, Calendar, Users, Newspaper, Map, Image as ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import UserMenu from "./UserMenu";
 
 const links = [
   { href: "/", label: "Accueil", icon: Flame },
   { href: "/feed", label: "Feed", icon: Newspaper },
   { href: "/chat", label: "Chat", icon: MessageSquare },
   { href: "/events", label: "Sorties", icon: Calendar },
-  { href: "/rides", label: "Itinéraires", icon: Map },
+  { href: "/rides", label: "Routes", icon: Map },
+  { href: "/gallery", label: "Galerie", icon: ImageIcon },
   { href: "/members", label: "Membres", icon: Users },
 ];
 
@@ -28,9 +30,9 @@ export default function Navbar() {
             <Flame className="h-5 w-5 text-white" />
           </motion.div>
           <div className="leading-none">
-            <div className="heading text-2xl tracking-[0.18em] gradient-text">MCT2000</div>
+            <div className="heading text-2xl tracking-[0.18em] gradient-text">MCT 2000</div>
             <div className="text-[10px] uppercase tracking-[0.3em] text-white/40">
-              motorcycle club
+              moto club · depuis 2000
             </div>
           </div>
         </Link>
@@ -62,12 +64,7 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link href="/login" className="btn-ghost px-4 py-2 text-sm">
-            Se connecter
-          </Link>
-          <Link href="/signup" className="btn-primary px-4 py-2 text-sm">
-            Rejoindre
-          </Link>
+          <UserMenu />
         </div>
       </div>
     </header>
