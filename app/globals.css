@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap");
+
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  background: #06060a;
+  color: #f5f5f5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle film grain overlay for the whole app */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.6'/></svg>");
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+  }
+  .glass-strong {
+    @apply bg-white/10 backdrop-blur-2xl border border-white/15;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-semibold tracking-wide
+           bg-gradient-to-r from-flame-600 to-flame-400 text-white
+           shadow-[0_0_30px_-5px_rgba(255,84,16,0.7)]
+           hover:shadow-[0_0_40px_-2px_rgba(255,84,16,0.9)] hover:-translate-y-0.5
+           transition-all duration-300;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-semibold tracking-wide
+           border border-white/15 text-white/90 hover:bg-white/5 transition-colors;
+  }
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white/70;
+  }
+  .heading {
+    @apply font-display tracking-wide uppercase;
+  }
+  .gradient-text {
+    @apply bg-gradient-to-r from-flame-200 via-flame-400 to-flame-600 bg-clip-text text-transparent;
+  }
+  .scanlines {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.03) 0,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
+  .noise-bg {
+    background:
+      radial-gradient(60% 60% at 50% 0%, rgba(255, 84, 16, 0.18), transparent 60%),
+      radial-gradient(40% 40% at 90% 90%, rgba(255, 122, 58, 0.12), transparent 70%),
+      linear-gradient(180deg, #06060a 0%, #0a0a12 100%);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #06060a;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ff5410, #c72b07);
+  border-radius: 999px;
+  border: 2px solid #06060a;
+}
