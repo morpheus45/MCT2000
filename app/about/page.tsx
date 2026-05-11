@@ -1,34 +1,70 @@
+import { MapPin, Users, Calendar, Heart } from "lucide-react";
+
 export const metadata = { title: "L'histoire · Moto Club MCT 2000" };
 
 export default function AboutPage() {
   return (
     <section className="mx-auto max-w-3xl px-5 py-16">
       <div className="chip mb-3">Histoire</div>
-      <h1 className="heading text-6xl">Depuis l'an 2000.</h1>
-      <div className="mt-8 space-y-6 text-lg leading-relaxed text-white/80">
+      <h1 className="heading text-6xl">
+        Clermont-l'Hérault, <span className="gradient-text">capitale du bitume.</span>
+      </h1>
+
+      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <Stat icon={MapPin} label="Base" value="Clermont-l'Hérault" />
+        <Stat icon={Users} label="Membres" value="131" />
+        <Stat icon={Calendar} label="Groupe FB" value="2013" />
+        <Stat icon={Heart} label="Cause" value="Téléthon" />
+      </div>
+
+      <div className="mt-10 space-y-6 text-lg leading-relaxed text-white/80">
         <p>
-          Le Moto Club MCT 2000 est né dans un garage en l'an 2000 — quelques potes, deux Bonneville, une Ducati, un café
-          serré et une carte de France punaisée au mur. L'idée était simple : rouler ensemble, sans
-          chichis, sans hiérarchie, sans cotisation.
+          Le <strong className="text-white">Moto Club MCT 2000</strong> est basé à
+          <strong className="text-white"> Clermont-l'Hérault</strong>, au cœur du Languedoc.
+          Toutes cylindrées, toutes marques, toutes générations — ce qui nous rassemble, c'est la
+          passion du deux-roues et l'envie de rouler ensemble.
         </p>
         <p>
-          26 ans plus tard, nous sommes <strong className="text-white">240 motards</strong> de toute
-          la France et au-delà, des routards GS aux puristes du flat-tracker, des week-end-warriors
-          aux baroudeurs longue distance. Ce qui n'a pas changé : la règle du club. Personne ne
-          reste en rade.
+          On organise des <strong className="text-white">balades moto lors du Téléthon</strong>,
+          des <strong className="text-white">balades entre filles</strong>, des sorties dominicales,
+          des road-trips dans tout le sud de la France et au-delà. Toujours avec l'esprit du club :
+          personne ne reste en rade.
         </p>
         <p>
-          On organise <strong className="text-white">47 sorties par an</strong>, des road-trips
-          internationaux, des ateliers mécanique, des soirées projection-débriefing, des opérations
-          solidaires. On a notre patch, notre histoire, nos morts qu'on n'oublie pas, et nos
-          jeunes qu'on forme.
-        </p>
-        <p>
-          Cette plateforme est notre nouvel espace : un endroit où l'on partage les itinéraires, où
+          Notre <strong className="text-white">groupe Facebook</strong> existe depuis février 2013
+          et rassemble aujourd'hui <strong className="text-white">131 motards</strong>. Cette
+          plateforme web est notre nouvel espace : un endroit où l'on partage les itinéraires, où
           l'on cause mécanique, où l'on s'inscrit aux sorties, où l'on garde la mémoire vivante du
           club. <strong className="gradient-text">Bienvenue à bord.</strong>
         </p>
       </div>
+
+      <div className="mt-12 rounded-2xl border border-flame-500/20 bg-flame-500/5 p-6">
+        <h2 className="heading mb-3 text-2xl">Notre engagement Téléthon</h2>
+        <p className="text-white/70">
+          Chaque année, le club roule pour le Téléthon. Une balade ouverte à tous, avec
+          inscriptions et dons reversés à l'AFM-Téléthon. C'est une fierté du club, et une tradition
+          qu'on perpétue depuis nos débuts.
+        </p>
+      </div>
     </section>
+  );
+}
+
+function Stat({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-ink-900/60 p-4">
+      <Icon className="mb-2 h-4 w-4 text-flame-400" />
+      <div className="text-[10px] uppercase tracking-[0.25em] text-white/40">{label}</div>
+      <div className="heading text-xl text-white">{value}</div>
+    </div>
   );
 }

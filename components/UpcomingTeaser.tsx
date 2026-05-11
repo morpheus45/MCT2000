@@ -6,25 +6,25 @@ import { Calendar, MapPin, Users } from "lucide-react";
 
 const upcoming = [
   {
-    date: "18 mai",
-    title: "Sortie matinale — Gorges du Verdon",
-    where: "Castellane → Moustiers",
-    riders: 14,
+    date: "24 mai",
+    title: "Balade entre filles — Lac du Salagou",
+    where: "Clermont-l'Hérault → Salagou (boucle)",
+    riders: 12,
     img: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1200&auto=format&fit=crop",
   },
   {
-    date: "25 mai",
-    title: "Atelier mécanique — chaîne & pignons",
-    where: "Atelier Marc, Lyon 7e",
-    riders: 8,
-    img: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1200&auto=format&fit=crop",
+    date: "7 juin",
+    title: "Sortie dominicale — Cirque de Mourèze",
+    where: "Départ place de la Mairie, 9h",
+    riders: 18,
+    img: "https://images.unsplash.com/photo-1547549082-6bc09f2049ae?q=80&w=1200&auto=format&fit=crop",
   },
   {
-    date: "1 juin",
-    title: "Road-trip — Col de la Bonette",
-    where: "Le plus haut col d'Europe",
-    riders: 22,
-    img: "https://images.unsplash.com/photo-1547549082-6bc09f2049ae?q=80&w=1200&auto=format&fit=crop",
+    date: "5 déc.",
+    title: "Téléthon — balade caritative",
+    where: "Clermont-l'Hérault, dons AFM",
+    riders: 42,
+    img: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?q=80&w=1200&auto=format&fit=crop",
   },
 ];
 

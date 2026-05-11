@@ -18,6 +18,7 @@ export default function Footer() {
           <h4 className="heading mb-3 text-sm tracking-[0.2em] text-white/80">Le club</h4>
           <ul className="space-y-2 text-sm text-white/50">
             <li><Link href="/about">L'histoire</Link></li>
+            <li><Link href="/rules">Règles du club</Link></li>
             <li><Link href="/members">Membres</Link></li>
             <li><Link href="/events">Sorties</Link></li>
             <li><Link href="/rides">Routes</Link></li>

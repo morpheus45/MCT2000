@@ -31,7 +31,7 @@ export default function Hero() {
             className="chip mb-6"
           >
             <span className="h-2 w-2 animate-pulse rounded-full bg-flame-500" />
-            Saison 2026 ouverte — 47 sorties au programme
+            Clermont-l'Hérault · 131 motards · saison 2026 ouverte
           </motion.div>
 
           <motion.h1
@@ -51,9 +51,9 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.15 }}
             className="mt-6 max-w-xl text-lg text-white/70"
           >
-            Le <strong className="text-white">Moto Club MCT 2000</strong> rassemble depuis l'an 2000 les
-            passionnés de deux-roues. Sorties dominicales, road-trips longue distance, mécanique
-            partagée — et surtout, une famille.
+            Le <strong className="text-white">Moto Club MCT 2000</strong> de Clermont-l'Hérault.
+            Toutes cylindrées, toutes marques. Balades Téléthon, sorties entre filles, road-trips
+            dans le sud — et surtout, une famille.
           </motion.p>
 
           <motion.div
@@ -78,9 +78,9 @@ export default function Hero() {
             className="mt-12 grid max-w-md grid-cols-3 gap-4 text-center"
           >
             {[
-              { v: "240+", l: "Membres" },
-              { v: "1.2M", l: "KM cumulés" },
-              { v: "47", l: "Sorties / an" },
+              { v: "131", l: "Motards" },
+              { v: "2013", l: "Sur Facebook" },
+              { v: "Téléthon", l: "Cause" },
             ].map((s) => (
               <div key={s.l} className="glass rounded-2xl p-4">
                 <div className="heading text-3xl gradient-text">{s.v}</div>

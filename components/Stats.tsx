@@ -3,11 +3,11 @@
 import { motion } from "framer-motion";
 
 const rows = [
-  { year: "2000", evt: "Fondation du club", note: "5 motards, un café, une idée." },
-  { year: "2008", evt: "Premier road-trip Maroc", note: "12 jours, 5 200 km, 14 motos." },
-  { year: "2015", evt: "100ème membre", note: "Le club passe les 100 cartes." },
-  { year: "2020", evt: "20 ans — édition spéciale", note: "Patch anniversaire, ride autour de la France." },
-  { year: "2026", evt: "Plateforme web lancée", note: "Le club entre dans une nouvelle ère." },
+  { year: "2000", evt: "Naissance du club", note: "Quelques motards à Clermont-l'Hérault — le Moto Club MCT 2000." },
+  { year: "2013", evt: "Le club arrive sur Facebook", note: "Le groupe est créé le 10 février 2013. Premiers posts, premières balades partagées." },
+  { year: "2018", evt: "Tradition Téléthon", note: "Le club organise sa balade annuelle pour le Téléthon. Tradition désormais ancrée." },
+  { year: "2022", evt: "Nouvelle identité", note: "Le club affirme son nom : Moto Club MCT 2000." },
+  { year: "2026", evt: "Plateforme web lancée", note: "Chat, feed, sorties, galerie — le club entre dans une nouvelle ère." },
 ];
 
 export default function Stats() {
@@ -17,7 +17,7 @@ export default function Stats() {
         <div className="mb-12">
           <div className="chip mb-4">Histoire</div>
           <h2 className="heading text-5xl md:text-6xl">
-            <span className="gradient-text">26 ans</span> sur la route.
+            <span className="gradient-text">26 ans</span> sur la route — et ça continue.
           </h2>
         </div>
 
