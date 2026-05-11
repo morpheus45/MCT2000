@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://morpheus45.github.io/MCT2000/sitemap.xml

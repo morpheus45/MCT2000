@@ -19,10 +19,12 @@ export default function Footer() {
           <ul className="space-y-2 text-sm text-white/50">
             <li><Link href="/about">L'histoire</Link></li>
             <li><Link href="/rules">Règles du club</Link></li>
+            <li><Link href="/telethon">Téléthon</Link></li>
             <li><Link href="/members">Membres</Link></li>
             <li><Link href="/events">Sorties</Link></li>
             <li><Link href="/rides">Routes</Link></li>
             <li><Link href="/gallery">Galerie</Link></li>
+            <li><Link href="/contact">Contact</Link></li>
           </ul>
         </div>
         <div>

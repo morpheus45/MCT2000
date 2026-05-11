@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06060a"/>
+      <stop offset="100%" stop-color="#1a1a26"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.7" cy="0.3" r="0.6">
+      <stop offset="0%" stop-color="#ff5410" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#ff5410" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="flame" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffc8a8"/>
+      <stop offset="50%" stop-color="#ff7a3a"/>
+      <stop offset="100%" stop-color="#c72b07"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Flame icon -->
+  <g transform="translate(90, 220)">
+    <path d="M60 0 C46 36 24 50 24 90 C24 130 46 158 60 200 C74 158 96 130 96 90 C96 50 74 36 60 0 Z" fill="url(#flame)"/>
+  </g>
+
+  <!-- Title -->
+  <text x="220" y="280" font-family="Impact, 'Arial Black', sans-serif" font-size="120" fill="#ffffff" letter-spacing="2">MCT 2000</text>
+  <text x="220" y="340" font-family="Impact, 'Arial Black', sans-serif" font-size="50" fill="url(#flame)" letter-spacing="4">MOTO CLUB · CLERMONT-L'HÉRAULT</text>
+
+  <!-- Tagline -->
+  <text x="220" y="430" font-family="Impact, 'Arial Black', sans-serif" font-size="60" fill="#ffffff" opacity="0.9">BROTHERHOOD.</text>
+  <text x="220" y="490" font-family="Impact, 'Arial Black', sans-serif" font-size="60" fill="url(#flame)">BITUME.</text>
+  <text x="220" y="550" font-family="Impact, 'Arial Black', sans-serif" font-size="60" fill="#ffffff" opacity="0.9">LIBERTÉ.</text>
+
+  <!-- Footer -->
+  <text x="1110" y="600" text-anchor="end" font-family="Impact, sans-serif" font-size="22" fill="#ffffff" opacity="0.4" letter-spacing="6">DEPUIS 2000</text>
+</svg>

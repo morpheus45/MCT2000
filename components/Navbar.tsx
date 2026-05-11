@@ -3,17 +3,17 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Flame, MessageSquare, Calendar, Users, Newspaper, Map, Image as ImageIcon } from "lucide-react";
+import { Flame, MessageSquare, Calendar, Users, Newspaper, Map, Image as ImageIcon, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UserMenu from "./UserMenu";
 
 const links = [
-  { href: "/", label: "Accueil", icon: Flame },
   { href: "/feed", label: "Feed", icon: Newspaper },
   { href: "/chat", label: "Chat", icon: MessageSquare },
   { href: "/events", label: "Sorties", icon: Calendar },
   { href: "/rides", label: "Routes", icon: Map },
   { href: "/gallery", label: "Galerie", icon: ImageIcon },
+  { href: "/telethon", label: "Téléthon", icon: Heart },
   { href: "/members", label: "Membres", icon: Users },
 ];
 

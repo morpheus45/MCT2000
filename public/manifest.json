@@ -1,0 +1,14 @@
+{
+  "name": "Moto Club MCT 2000",
+  "short_name": "MCT 2000",
+  "description": "Le club moto de Clermont-l'Hérault — sorties, chat, feed, Téléthon.",
+  "start_url": "/MCT2000/",
+  "scope": "/MCT2000/",
+  "display": "standalone",
+  "background_color": "#06060a",
+  "theme_color": "#ff5410",
+  "icons": [
+    { "src": "/MCT2000/icon-192.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "/MCT2000/icon-192.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
