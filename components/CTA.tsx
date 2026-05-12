@@ -13,11 +13,11 @@ export default function CTA() {
         <img
           src="https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=2400&auto=format&fit=crop"
           alt=""
-          className="h-full w-full object-cover object-center brightness-[0.35] saturate-[1.1]"
+          className="h-full w-full object-cover object-center brightness-[0.72] saturate-[1.15]"
         />
       </div>
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-midnight-900/80 via-midnight-900/60 to-midnight-900" />
-      <div className="absolute inset-0 -z-10 scanlines opacity-25" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-midnight-900/55 via-midnight-900/30 to-midnight-900/75" />
+      <div className="absolute inset-0 -z-10 scanlines opacity-15" />
 
       <div className="mx-auto flex min-h-[80vh] max-w-7xl flex-col items-center justify-center px-5 py-32 text-center lg:px-12">
         <div className="mb-6 flex items-center gap-3">

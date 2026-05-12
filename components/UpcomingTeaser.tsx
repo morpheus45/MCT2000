@@ -26,7 +26,7 @@ const upcoming = [
   {
     date: "05",
     month: "DÉC",
-    title: "Téléthon · balade caritative",
+    title: "Téléthon · caritatif",
     where: "Boucle 100 km · dons AFM",
     riders: 42,
     level: "Caritatif",
@@ -36,9 +36,7 @@ const upcoming = [
 
 export default function UpcomingTeaser() {
   return (
-    <section className="relative py-32">
-      <div className="absolute inset-0 -z-10 midnight-bg" />
-
+    <section className="relative paper-bg py-32">
       <div className="mx-auto mb-16 max-w-7xl px-5 lg:px-12">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
@@ -60,9 +58,8 @@ export default function UpcomingTeaser() {
         </div>
       </div>
 
-      {/* Editorial film-strip layout */}
       <div className="mx-auto max-w-7xl px-5 lg:px-12">
-        <div className="space-y-6">
+        <div className="grid gap-6 md:grid-cols-3">
           {upcoming.map((e, i) => (
             <motion.article
               key={e.title}
@@ -70,44 +67,43 @@ export default function UpcomingTeaser() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.6, delay: i * 0.12 }}
-              className="group relative grid grid-cols-1 overflow-hidden border border-bone-50/10 bg-midnight-900/60 transition-all hover:border-flame-500/40 md:grid-cols-[200px_1fr] md:items-stretch"
+              className="group relative overflow-hidden bg-midnight-700 transition-all hover:-translate-y-1"
             >
-              {/* Date column */}
-              <div className="relative flex flex-col items-center justify-center bg-midnight-700/50 p-8 md:p-6">
-                <div className="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-transparent via-flame-500 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
-                <div className="brass-text font-display text-7xl leading-none">{e.date}</div>
-                <div className="mt-2 font-mono text-xs uppercase tracking-widest2 text-bone-50/60">{e.month}</div>
-              </div>
-
-              {/* Visual + content */}
-              <div className="relative grid md:grid-cols-[1fr_320px]">
-                <div className="p-8 md:p-10">
-                  <span className="chip">{e.level}</span>
-                  <h3 className="mt-4 font-display text-3xl tracking-wide text-bone-50 md:text-4xl">
-                    {e.title}
-                  </h3>
-                  <p className="mt-3 flex items-center gap-2 font-editorial italic text-bone-50/70">
-                    <MapPin className="h-3.5 w-3.5 text-flame-400" /> {e.where}
-                  </p>
-                  <div className="mt-6 flex flex-wrap items-center gap-6 text-sm">
-                    <span className="flex items-center gap-2 text-bone-50/60">
-                      <Users className="h-4 w-4 text-flame-400" /> {e.riders} inscrits
-                    </span>
-                    <Link
-                      href="/events"
-                      className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest2 text-flame-400 hover:underline"
-                    >
-                      S'inscrire <ArrowUpRight className="h-3 w-3" />
-                    </Link>
+              {/* Hero image */}
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <div
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                  style={{ backgroundImage: `url(${e.img})` }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-midnight-700 via-transparent to-transparent" />
+                {/* Floating date badge */}
+                <div className="absolute left-4 top-4 bg-bone-50 px-3 py-2 text-ink-950 shadow-lg">
+                  <div className="font-display text-3xl leading-none">{e.date}</div>
+                  <div className="text-center font-mono text-[9px] uppercase tracking-widest2 text-flame-700">
+                    {e.month}
                   </div>
                 </div>
-
-                {/* Image */}
-                <div
-                  className="hidden bg-cover bg-center transition-transform duration-700 group-hover:scale-105 md:block"
-                  style={{ backgroundImage: `url(${e.img})` }}
-                >
-                  <div className="h-full w-full bg-gradient-to-r from-midnight-900 via-transparent to-transparent" />
+                {/* Level chip */}
+                <div className="absolute right-4 top-4 chip border-bone-50/40 bg-ink-950/60 text-bone-50">
+                  {e.level}
+                </div>
+              </div>
+              {/* Bottom content */}
+              <div className="p-5">
+                <h3 className="font-display text-2xl tracking-wide text-bone-50">{e.title}</h3>
+                <p className="mt-2 flex items-center gap-2 font-editorial italic text-sm text-bone-50/70">
+                  <MapPin className="h-3 w-3 text-flame-400" /> {e.where}
+                </p>
+                <div className="mt-4 flex items-center justify-between border-t border-bone-50/10 pt-3 text-sm">
+                  <span className="flex items-center gap-1.5 text-bone-50/60">
+                    <Users className="h-3.5 w-3.5 text-flame-400" /> {e.riders} inscrits
+                  </span>
+                  <Link
+                    href="/events"
+                    className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-widest2 text-flame-400 transition-transform group-hover:translate-x-1"
+                  >
+                    S'inscrire <ArrowUpRight className="h-3 w-3" />
+                  </Link>
                 </div>
               </div>
             </motion.article>

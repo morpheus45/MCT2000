@@ -17,12 +17,12 @@ export default function CinemaQuote() {
         <img
           src="https://images.unsplash.com/photo-1547549082-6bc09f2049ae?q=80&w=2400&auto=format&fit=crop"
           alt=""
-          className="h-[120%] w-full object-cover object-center brightness-[0.45]"
+          className="h-[120%] w-full object-cover object-center brightness-[0.78] saturate-[1.1]"
         />
       </motion.div>
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-midnight-900 via-midnight-900/40 to-transparent" />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-transparent to-midnight-900/80" />
-      <div className="absolute inset-0 -z-10 scanlines opacity-20" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-midnight-900/80 via-midnight-900/15 to-transparent" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-transparent to-midnight-900/55" />
+      <div className="absolute inset-0 -z-10 scanlines opacity-12" />
 
       <motion.div style={{ y: yText }} className="mx-auto flex min-h-[80vh] max-w-7xl flex-col justify-center px-5 py-32 lg:px-12">
         <div className="mb-6 flex items-center gap-3">

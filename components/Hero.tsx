@@ -21,14 +21,14 @@ export default function Hero() {
         <img
           src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=2400&auto=format&fit=crop"
           alt=""
-          className="h-[120%] w-full object-cover object-center brightness-[0.55] saturate-[1.05]"
+          className="h-[120%] w-full object-cover object-center brightness-[0.85] saturate-[1.15]"
         />
       </motion.div>
 
-      {/* Cinematic gradient overlay */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-midnight-900 via-midnight-900/55 to-midnight-900/40" />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-midnight-900/95 via-midnight-900/30 to-transparent" />
-      <div className="absolute inset-0 -z-10 scanlines opacity-25" />
+      {/* Cinematic gradient overlay — much lighter for visibility */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-midnight-900/85 via-midnight-900/25 to-midnight-900/15" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-midnight-900/75 via-midnight-900/10 to-transparent" />
+      <div className="absolute inset-0 -z-10 scanlines opacity-15" />
 
       {/* Decorative wheel — far right, partially off-screen, rotates on scroll */}
       <motion.div style={{ y: yText }} className="pointer-events-none absolute -right-32 top-[18%] hidden lg:block">
