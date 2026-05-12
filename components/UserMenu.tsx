@@ -4,19 +4,20 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { User, Shield, LogOut, ChevronDown } from "lucide-react";
-import { getSupabaseBrowser, supabaseConfigured } from "@/lib/supabase/client";
+import { getSupabaseBrowser } from "@/lib/supabase/client";
+import { isDemo, demoMe } from "@/lib/demo";
 
 type Profile = { id: string; pseudo: string; role: string };
 
 export default function UserMenu() {
   const supabase = useMemo(() => getSupabaseBrowser(), []);
   const router = useRouter();
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(isDemo ? demoMe : null);
   const [open, setOpen] = useState(false);
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(isDemo);
 
   useEffect(() => {
-    if (!supabase) {
+    if (isDemo || !supabase) {
       setReady(true);
       return;
     }
@@ -58,7 +59,7 @@ export default function UserMenu() {
 
   if (!ready) return <div className="h-9 w-24 animate-pulse rounded-full bg-white/5" />;
 
-  if (!profile || !supabaseConfigured) {
+  if (!profile) {
     return (
       <>
         <Link href="/login" className="btn-ghost px-4 py-2 text-sm">Se connecter</Link>
@@ -99,6 +100,11 @@ export default function UserMenu() {
           )}
           <button
             onClick={async () => {
+              if (isDemo) {
+                alert("Mode démo — pas de session à fermer. Connecte Supabase pour activer l'auth.");
+                setOpen(false);
+                return;
+              }
               await supabase?.auth.signOut();
               router.push("/");
               router.refresh();
@@ -106,7 +112,7 @@ export default function UserMenu() {
             }}
             className="flex w-full items-center gap-2 border-t border-white/5 px-4 py-3 text-sm text-white/70 hover:bg-white/5"
           >
-            <LogOut className="h-4 w-4" /> Déconnexion
+            <LogOut className="h-4 w-4" /> {isDemo ? "Déconnexion (démo)" : "Déconnexion"}
           </button>
         </div>
       )}

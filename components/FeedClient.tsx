@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Heart, MessageCircle, Send, Loader2, ImagePlus } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
+import { isDemo, demoMe, demoPosts } from "@/lib/demo";
 import { formatDateFr } from "@/lib/utils";
 
 type Post = {
@@ -21,14 +22,14 @@ type Post = {
 
 export default function FeedClient() {
   const supabase = useMemo(() => getSupabaseBrowser(), []);
-  const [user, setUser] = useState<{ id: string } | null>(null);
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [user, setUser] = useState<{ id: string } | null>(isDemo ? { id: demoMe.id } : null);
+  const [posts, setPosts] = useState<Post[]>(isDemo ? demoPosts : []);
   const [draft, setDraft] = useState("");
   const [posting, setPosting] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!isDemo);
 
   useEffect(() => {
-    if (!supabase) return;
+    if (!supabase || isDemo) return;
     (async () => {
       const { data: u } = await supabase.auth.getUser();
       setUser(u.user ? { id: u.user.id } : null);
@@ -57,6 +58,23 @@ export default function FeedClient() {
   }
 
   async function publish() {
+    if (isDemo) {
+      if (!draft.trim()) return;
+      const newPost: Post = {
+        id: `local-${Date.now()}`,
+        user_id: demoMe.id,
+        pseudo: demoMe.pseudo,
+        content: draft.trim(),
+        image_url: null,
+        created_at: new Date().toISOString(),
+        like_count: 0,
+        comment_count: 0,
+        liked_by_me: false,
+      };
+      setPosts((prev) => [newPost, ...prev]);
+      setDraft("");
+      return;
+    }
     if (!supabase || !user || !draft.trim()) return;
     setPosting(true);
     const { error } = await supabase
@@ -70,6 +88,16 @@ export default function FeedClient() {
   }
 
   async function toggleLike(postId: string, liked: boolean) {
+    if (isDemo) {
+      setPosts((prev) =>
+        prev.map((p) =>
+          p.id === postId
+            ? { ...p, liked_by_me: !liked, like_count: p.like_count + (liked ? -1 : 1) }
+            : p,
+        ),
+      );
+      return;
+    }
     if (!supabase || !user) return;
     if (liked) {
       await supabase.from("post_likes").delete().eq("post_id", postId).eq("user_id", user.id);

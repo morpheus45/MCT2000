@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Calendar, ImagePlus, Megaphone, Facebook, Loader2, Shield } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
+import { isDemo, demoMe } from "@/lib/demo";
 import { cn } from "@/lib/utils";
 
 type Tab = "events" | "post" | "gallery" | "import";
@@ -12,12 +13,12 @@ type Profile = { id: string; pseudo: string; role: string };
 
 export default function AdminClient() {
   const supabase = useMemo(() => getSupabaseBrowser(), []);
-  const [me, setMe] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [me, setMe] = useState<Profile | null>(isDemo ? demoMe : null);
+  const [loading, setLoading] = useState(!isDemo);
   const [tab, setTab] = useState<Tab>("events");
 
   useEffect(() => {
-    if (!supabase) return;
+    if (!supabase || isDemo) return;
     (async () => {
       const { data: u } = await supabase.auth.getUser();
       if (!u.user) {
@@ -86,10 +87,16 @@ where pseudo = '${me.pseudo}';`}</pre>
           <Shield className="h-6 w-6" />
         </div>
         <div>
-          <div className="chip mb-1">Admin</div>
+          <div className="chip mb-1">Admin · {me.pseudo}</div>
           <h1 className="heading text-4xl">Bureau du club.</h1>
         </div>
       </header>
+
+      {isDemo && (
+        <div className="mb-6 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-100">
+          🎬 <strong>Aperçu admin</strong> — tu es connecté en tant que <strong>{demoMe.pseudo} (admin)</strong> en mode démo. Les formulaires sont remplis d'exemples mais les boutons "Publier" sont désactivés tant que Supabase n'est pas connecté.
+        </div>
+      )}
 
       <div className="mb-6 flex flex-wrap gap-2 border-b border-white/10 pb-3">
         {tabs.map((t) => (
@@ -136,16 +143,24 @@ function CreateEvent() {
   const supabase = useMemo(() => getSupabaseBrowser(), []);
   const [busy, setBusy] = useState(false);
   const [ok, setOk] = useState(false);
-  const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
+  const [title, setTitle] = useState(isDemo ? "Balade dominicale — Cirque de Mourèze" : "");
+  const [date, setDate] = useState(
+    isDemo ? new Date(Date.now() + 86_400_000 * 14).toISOString().slice(0, 10) : "",
+  );
   const [time, setTime] = useState("09:00");
-  const [where, setWhere] = useState("");
-  const [distance, setDistance] = useState<number | "">("");
+  const [where, setWhere] = useState(isDemo ? "Café du marché, Clermont-l'Hérault" : "");
+  const [distance, setDistance] = useState<number | "">(isDemo ? 90 : "");
   const [level, setLevel] = useState("Facile");
-  const [desc, setDesc] = useState("");
+  const [desc, setDesc] = useState(
+    isDemo ? "Café à 8h45, briefing court, départ groupé à 9h. Petite boucle de 90 km, photo au cirque, retour vers 13h." : "",
+  );
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (isDemo) {
+      alert("Mode démo — connecte Supabase pour activer la création de sorties (voir README).");
+      return;
+    }
     if (!supabase) return;
     setBusy(true);
     const { error } = await supabase.from("events").insert({
@@ -201,7 +216,9 @@ function CreateEvent() {
           <textarea value={desc} onChange={(e) => setDesc(e.target.value)} className="input min-h-[100px]" placeholder="Café au point de RDV à 8h45, briefing, départ 9h..." />
         </Label>
         <div className="flex items-center gap-3">
-          <button disabled={busy} className="btn-primary">{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Publier la sortie"}</button>
+          <button disabled={busy || isDemo} className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed" title={isDemo ? "Désactivé en mode démo" : undefined}>
+            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : isDemo ? "🎬 Démo — Publier" : "Publier la sortie"}
+          </button>
           {ok && <span className="text-sm text-emerald-400">✓ Sortie créée</span>}
         </div>
       </form>
@@ -211,13 +228,21 @@ function CreateEvent() {
 
 function CreatePost() {
   const supabase = useMemo(() => getSupabaseBrowser(), []);
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(
+    isDemo
+      ? "🏍️ Rappel : pensez à mettre à jour vos coordonnées dans /profile avant fin du mois pour la mise à jour du carnet de bord du club. Bonne route à tous !"
+      : "",
+  );
   const [imageUrl, setImageUrl] = useState("");
   const [busy, setBusy] = useState(false);
   const [ok, setOk] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (isDemo) {
+      alert("Mode démo — connecte Supabase pour publier sur le feed (voir README).");
+      return;
+    }
     if (!supabase) return;
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) return;
@@ -249,7 +274,9 @@ function CreatePost() {
           <input type="url" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="input" placeholder="https://..." />
         </Label>
         <div className="flex items-center gap-3">
-          <button disabled={busy} className="btn-primary">{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Publier"}</button>
+          <button disabled={busy || isDemo} className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
+            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : isDemo ? "🎬 Démo — Publier" : "Publier"}
+          </button>
           {ok && <span className="text-sm text-emerald-400">✓ Publié</span>}
         </div>
       </form>
@@ -259,14 +286,20 @@ function CreatePost() {
 
 function AddGalleryPhoto() {
   const supabase = useMemo(() => getSupabaseBrowser(), []);
-  const [imageUrl, setImageUrl] = useState("");
-  const [caption, setCaption] = useState("");
-  const [takenAt, setTakenAt] = useState("");
+  const [imageUrl, setImageUrl] = useState(
+    isDemo ? "https://images.unsplash.com/photo-1547549082-6bc09f2049ae?q=80&w=1400" : "",
+  );
+  const [caption, setCaption] = useState(isDemo ? "Sortie Téléthon 2025 — départ devant la Mairie" : "");
+  const [takenAt, setTakenAt] = useState(isDemo ? "2025-12-06" : "");
   const [busy, setBusy] = useState(false);
   const [ok, setOk] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (isDemo) {
+      alert("Mode démo — connecte Supabase pour ajouter des photos à la galerie.");
+      return;
+    }
     if (!supabase) return;
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) return;
@@ -306,7 +339,9 @@ function AddGalleryPhoto() {
           <input type="date" value={takenAt} onChange={(e) => setTakenAt(e.target.value)} className="input" />
         </Label>
         <div className="flex items-center gap-3">
-          <button disabled={busy} className="btn-primary">{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Ajouter à la galerie"}</button>
+          <button disabled={busy || isDemo} className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
+            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : isDemo ? "🎬 Démo — Ajouter" : "Ajouter à la galerie"}
+          </button>
           {ok && <span className="text-sm text-emerald-400">✓ Ajoutée</span>}
         </div>
       </form>
@@ -316,13 +351,23 @@ function AddGalleryPhoto() {
 
 function FacebookImport() {
   const supabase = useMemo(() => getSupabaseBrowser(), []);
-  const [text, setText] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [text, setText] = useState(
+    isDemo
+      ? "Belle journée à tous, nous avons fait une superbe balade autour du lac du Salagou ce matin. Une trentaine de motards au total, soleil au RDV et bonne ambiance ! Merci à tous pour ce partage. Rendez-vous le mois prochain pour la prochaine sortie."
+      : "",
+  );
+  const [imageUrl, setImageUrl] = useState(
+    isDemo ? "https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1200" : "",
+  );
   const [busy, setBusy] = useState(false);
   const [ok, setOk] = useState(false);
 
   async function importPost(e: React.FormEvent) {
     e.preventDefault();
+    if (isDemo) {
+      alert("Mode démo — connecte Supabase pour importer les posts Facebook.");
+      return;
+    }
     if (!supabase) return;
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) return;
@@ -366,7 +411,9 @@ function FacebookImport() {
           <input type="url" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="input" placeholder="https://scontent..." />
         </Label>
         <div className="flex items-center gap-3">
-          <button disabled={busy} className="btn-primary">{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Importer"}</button>
+          <button disabled={busy || isDemo} className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
+            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : isDemo ? "🎬 Démo — Importer" : "Importer"}
+          </button>
           {ok && <span className="text-sm text-emerald-400">✓ Post importé</span>}
         </div>
       </form>

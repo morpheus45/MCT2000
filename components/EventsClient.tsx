@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Users, Check, Loader2 } from "lucide-react";
 import { getSupabaseBrowser, supabaseConfigured } from "@/lib/supabase/client";
+import { isDemo, demoMe, demoEvents } from "@/lib/demo";
 import { cn } from "@/lib/utils";
 
 type EventRow = {
@@ -30,12 +31,12 @@ const seed: EventRow[] = [
 
 export default function EventsClient() {
   const supabase = useMemo(() => getSupabaseBrowser(), []);
-  const [events, setEvents] = useState<EventRow[]>(seed);
-  const [userId, setUserId] = useState<string | null>(null);
+  const [events, setEvents] = useState<EventRow[]>(isDemo ? demoEvents : seed);
+  const [userId, setUserId] = useState<string | null>(isDemo ? demoMe.id : null);
   const [pending, setPending] = useState<string | null>(null);
 
   async function refresh() {
-    if (!supabase) return;
+    if (!supabase || isDemo) return;
     const { data } = await supabase
       .from("events_with_counts")
       .select("*")
@@ -45,7 +46,7 @@ export default function EventsClient() {
   }
 
   useEffect(() => {
-    if (!supabase) return;
+    if (!supabase || isDemo) return;
     (async () => {
       const { data: u } = await supabase.auth.getUser();
       setUserId(u.user?.id ?? null);
@@ -55,6 +56,20 @@ export default function EventsClient() {
   }, [supabase]);
 
   async function rsvp(eventId: string, currentlyGoing: boolean) {
+    if (isDemo) {
+      setEvents((prev) =>
+        prev.map((e) =>
+          e.id === eventId
+            ? {
+                ...e,
+                my_status: currentlyGoing ? null : "going",
+                going_count: e.going_count + (currentlyGoing ? -1 : 1),
+              }
+            : e,
+        ),
+      );
+      return;
+    }
     if (!supabase || !userId) return;
     setPending(eventId);
     if (currentlyGoing) {
@@ -75,9 +90,11 @@ export default function EventsClient() {
         <div className="chip mb-3">Calendrier</div>
         <h1 className="heading text-6xl">Les sorties à venir.</h1>
         <p className="mt-3 max-w-xl text-white/60">
-          {supabaseConfigured && events.length > 0
-            ? "Inscris-toi en un clic. Le compteur est en temps réel."
-            : "Connecte Supabase + crée des sorties depuis /admin pour activer l'inscription."}
+          {isDemo
+            ? "Aperçu démo — tu peux tester l'inscription, ça reste local. Connecte Supabase pour les vraies données."
+            : supabaseConfigured && events.length > 0
+              ? "Inscris-toi en un clic. Le compteur est en temps réel."
+              : "Connecte Supabase + crée des sorties depuis /admin pour activer l'inscription."}
         </p>
       </div>
 

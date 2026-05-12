@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Loader2, LogOut, Save, User } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
+import { isDemo, demoMe } from "@/lib/demo";
 
 type Profile = {
   id: string;
@@ -21,13 +22,13 @@ type Profile = {
 export default function ProfileClient() {
   const router = useRouter();
   const supabase = useMemo(() => getSupabaseBrowser(), []);
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<Profile | null>(isDemo ? demoMe : null);
+  const [loading, setLoading] = useState(!isDemo);
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!supabase) return;
+    if (!supabase || isDemo) return;
     (async () => {
       const { data: u } = await supabase.auth.getUser();
       if (!u.user) {
@@ -45,6 +46,10 @@ export default function ProfileClient() {
   }, [supabase]);
 
   async function save() {
+    if (isDemo) {
+      alert("Mode démo — connecte Supabase pour enregistrer ton profil.");
+      return;
+    }
     if (!supabase || !profile) return;
     setSaving(true);
     const { error } = await supabase
@@ -147,9 +152,9 @@ export default function ProfileClient() {
           </label>
 
           <div className="flex items-center gap-3 pt-2">
-            <button onClick={save} disabled={saving} className="btn-primary">
+            <button onClick={save} disabled={saving || isDemo} className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-              Enregistrer
+              {isDemo ? "🎬 Démo — Enregistrer" : "Enregistrer"}
             </button>
             {savedAt && Date.now() - savedAt < 4000 && (
               <span className="text-sm text-emerald-400">✓ Profil mis à jour</span>

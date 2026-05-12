@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Hash, Send, Users, Loader2 } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
+import { isDemo, demoMe, demoChannels, demoMessagesByChannel } from "@/lib/demo";
 import { cn } from "@/lib/utils";
 
 type Channel = { id: string; slug: string; name: string; description: string | null };
@@ -18,18 +19,24 @@ type Message = {
 
 export default function ChatClient() {
   const supabase = useMemo(() => getSupabaseBrowser(), []);
-  const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
-  const [channels, setChannels] = useState<Channel[]>([]);
-  const [active, setActive] = useState<Channel | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [user, setUser] = useState<{ id: string; email?: string } | null>(
+    isDemo ? { id: demoMe.id } : null,
+  );
+  const [channels, setChannels] = useState<Channel[]>(isDemo ? demoChannels : []);
+  const [active, setActive] = useState<Channel | null>(
+    isDemo ? demoChannels[0] : null,
+  );
+  const [messages, setMessages] = useState<Message[]>(
+    isDemo ? demoMessagesByChannel[demoChannels[0].id] ?? [] : [],
+  );
   const [draft, setDraft] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!isDemo);
   const [sending, setSending] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Load auth + channels
+  // Load auth + channels (real Supabase)
   useEffect(() => {
-    if (!supabase) return;
+    if (!supabase || isDemo) return;
     let mounted = true;
     (async () => {
       const { data: u } = await supabase.auth.getUser();
@@ -51,9 +58,15 @@ export default function ChatClient() {
     };
   }, [supabase]);
 
+  // When the active channel changes in demo mode, swap messages
+  useEffect(() => {
+    if (!isDemo || !active) return;
+    setMessages(demoMessagesByChannel[active.id] ?? []);
+  }, [active]);
+
   // Load messages + subscribe to realtime when channel changes
   useEffect(() => {
-    if (!supabase || !active) return;
+    if (!supabase || !active || isDemo) return;
 
     let cancelled = false;
     (async () => {
@@ -96,6 +109,21 @@ export default function ChatClient() {
   }, [messages]);
 
   async function send() {
+    if (isDemo) {
+      if (!active || !draft.trim()) return;
+      // Demo: append locally
+      const newMsg: Message = {
+        id: `local-${Date.now()}`,
+        channel_id: active.id,
+        user_id: demoMe.id,
+        pseudo: demoMe.pseudo,
+        content: draft.trim(),
+        created_at: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, newMsg]);
+      setDraft("");
+      return;
+    }
     if (!supabase || !active || !user || !draft.trim()) return;
     setSending(true);
     const content = draft.trim();
