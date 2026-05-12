@@ -39,7 +39,7 @@ export default function PageReveal() {
           MCT <span className="editorial text-flame-400">2000</span>
         </div>
         <div className="mt-1 font-mono text-[9px] uppercase tracking-[0.4em] text-bone-50/40">
-          ignition
+          démarrage
         </div>
       </div>
     </div>

@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Moto Club MCT 2000 — Clermont-l'Hérault",
-    description: "Brotherhood. Bitume. Liberté. Depuis 2000.",
+    description: "Fraternité. Bitume. Liberté. Depuis l'an 2000.",
     type: "website",
     locale: "fr_FR",
     images: [{ url: `${basePath}/og-image.svg`, width: 1200, height: 630 }],
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Moto Club MCT 2000",
-    description: "Brotherhood. Bitume. Liberté.",
+    description: "Fraternité. Bitume. Liberté.",
     images: [`${basePath}/og-image.svg`],
   },
 };

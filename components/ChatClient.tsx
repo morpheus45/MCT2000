@@ -92,7 +92,7 @@ export default function ChatClient() {
             .select("pseudo")
             .eq("id", m.user_id)
             .maybeSingle();
-          setMessages((prev) => [...prev, { ...m, pseudo: prof?.pseudo ?? "rider" }]);
+          setMessages((prev) => [...prev, { ...m, pseudo: prof?.pseudo ?? "motard" }]);
         },
       )
       .subscribe();
@@ -247,7 +247,7 @@ function MessageRow({ m, mine }: { m: Message; mine: boolean }) {
       </div>
       <div className={cn("max-w-[70%]", mine && "text-right")}>
         <div className="mb-1 flex items-center gap-2 text-xs text-white/40">
-          <span className="font-semibold text-white/70">{m.pseudo ?? "rider"}</span>
+          <span className="font-semibold text-white/70">{m.pseudo ?? "motard"}</span>
           <span>·</span>
           <span>{time}</span>
         </div>

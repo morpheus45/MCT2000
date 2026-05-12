@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="border-b border-bone-50/10">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-5 py-3 font-mono text-[10px] uppercase tracking-widest2 text-bone-50/40">
           <span>Colophon · Imprimé sur le bitume du Languedoc</span>
-          <span>Ride free, ride safe.</span>
+          <span>Roule libre, roule prudent.</span>
         </div>
       </div>
 
@@ -19,7 +19,7 @@ export default function Footer() {
             MCT <span className="editorial text-flame-400">2000</span>
           </div>
           <p className="mt-3 max-w-sm editorial text-bone-50/70">
-            «&nbsp;Brotherhood. Bitume. Liberté. Depuis l'an 2000, on roule ensemble&nbsp;» — depuis Clermont-l'Hérault.
+            «&nbsp;Fraternité. Bitume. Liberté. Depuis l'an 2000, on roule ensemble&nbsp;» — depuis Clermont-l'Hérault.
           </p>
           <div className="mt-5 flex gap-2">
             <a aria-label="Facebook" href="https://www.facebook.com/groups/531676370210673/" target="_blank" rel="noreferrer" className="border border-bone-50/15 p-2 hover:bg-flame-500 hover:border-flame-500 hover:text-ink-950 transition-colors">
@@ -67,9 +67,9 @@ export default function Footer() {
             <span className="font-mono text-[10px] uppercase tracking-widest2 text-bone-50/40">Adhésion</span>
           </div>
           <ul className="space-y-2 font-mono text-sm uppercase tracking-wide text-bone-50/70">
-            <li><Link href="/feed" className="hover:text-flame-400">Feed</Link></li>
+            <li><Link href="/feed" className="hover:text-flame-400">Fil</Link></li>
             <li><Link href="/chat" className="hover:text-flame-400">Chat</Link></li>
-            <li><Link href="/login" className="hover:text-flame-400">Login</Link></li>
+            <li><Link href="/login" className="hover:text-flame-400">Connexion</Link></li>
             <li><Link href="/signup" className="hover:text-flame-400">Rejoindre</Link></li>
           </ul>
         </div>

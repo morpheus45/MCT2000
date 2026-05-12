@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { User, Shield, LogOut, ChevronDown } from "lucide-react";
+import { User, Shield, LogOut, ChevronDown, LogIn } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { isDemo, demoMe } from "@/lib/demo";
 
@@ -61,10 +61,20 @@ export default function UserMenu() {
 
   if (!profile) {
     return (
-      <>
-        <Link href="/login" className="btn-ghost px-4 py-2 text-sm">Se connecter</Link>
-        <Link href="/signup" className="btn-primary px-4 py-2 text-sm">Rejoindre</Link>
-      </>
+      <div className="flex items-center gap-2">
+        <Link
+          href="/login"
+          className="inline-flex items-center gap-2 border-2 border-flame-500 bg-flame-500/10 px-4 py-2 font-display text-sm uppercase tracking-widest text-flame-300 hover:bg-flame-500 hover:text-ink-950 transition-colors"
+        >
+          <LogIn className="h-4 w-4" /> Connexion
+        </Link>
+        <Link
+          href="/signup"
+          className="hidden sm:inline-flex items-center gap-2 bg-flame-500 px-4 py-2 font-display text-sm uppercase tracking-widest text-ink-950 hover:bg-flame-400 transition-colors"
+        >
+          Rejoindre
+        </Link>
+      </div>
     );
   }
 

@@ -1,15 +1,16 @@
 "use client";
 
-// Cream-paper ticker — alternates with dark sections to lighten the page.
+// Bandeau défilant en français — alterne display capitales et italique éditorial.
 const words: { t: string; cls: string }[] = [
-  { t: "RIDE TOGETHER", cls: "font-display tracking-widest2 text-ink-950" },
-  { t: "no rider left behind", cls: "editorial text-blood-600 lowercase" },
-  { t: "TWIN CYLINDERS", cls: "font-display tracking-widest2 text-ink-950/55" },
-  { t: "throttle therapy", cls: "editorial text-flame-700 lowercase" },
-  { t: "MIDNIGHT RUNS", cls: "font-display tracking-widest2 text-ink-950" },
-  { t: "asphalt cathedral", cls: "editorial text-ink-950/55 lowercase" },
-  { t: "TWO WHEELS — ONE FAMILY", cls: "font-display tracking-widest2 text-flame-600" },
-  { t: "ride or wrench", cls: "editorial text-blood-600 lowercase" },
+  { t: "ROULER ENSEMBLE", cls: "font-display tracking-widest2 text-ink-950" },
+  { t: "personne ne reste en rade", cls: "editorial text-blood-600 lowercase" },
+  { t: "DEUX-ROUES, UNE FAMILLE", cls: "font-display tracking-widest2 text-ink-950/55" },
+  { t: "bitume et liberté", cls: "editorial text-flame-700 lowercase" },
+  { t: "BALADES & ROAD-TRIPS", cls: "font-display tracking-widest2 text-ink-950" },
+  { t: "cathédrale d'asphalte", cls: "editorial text-ink-950/55 lowercase" },
+  { t: "TOUTES CYLINDRÉES", cls: "font-display tracking-widest2 text-flame-600" },
+  { t: "mécanique partagée", cls: "editorial text-blood-600 lowercase" },
+  { t: "DEPUIS L'AN 2000", cls: "font-mono uppercase tracking-widest2 text-ink-950/60 text-sm" },
 ];
 
 export default function Marquee() {
@@ -23,7 +24,6 @@ export default function Marquee() {
           </span>
         ))}
       </div>
-      {/* Edge fades */}
       <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-bone-100 to-transparent" />
       <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-bone-100 to-transparent" />
     </div>

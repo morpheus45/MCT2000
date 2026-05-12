@@ -23,8 +23,8 @@ const seedPhotos: Photo[] = [
   { id: "s7", image_url: "https://images.unsplash.com/photo-1474401869869-9fe17f9b0a6f?q=80&w=1400&auto=format&fit=crop", caption: "Mont Aigoual — Cévennes", taken_at: "2025-03-22" },
   { id: "s8", image_url: "https://images.unsplash.com/photo-1517400508447-f8dd518b86db?q=80&w=1400&auto=format&fit=crop", caption: "Cols Pyrénéens", taken_at: "2025-04-10" },
   { id: "s9", image_url: "https://images.unsplash.com/photo-1502980426475-b83966705988?q=80&w=1400&auto=format&fit=crop", caption: "Forêt de Brocéliande", taken_at: "2024-10-08" },
-  { id: "s10", image_url: "https://images.unsplash.com/photo-1591216105468-f02e4c93cc05?q=80&w=1400&auto=format&fit=crop", caption: "Vintage night ride", taken_at: "2024-11-20" },
-  { id: "s11", image_url: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?q=80&w=1400&auto=format&fit=crop", caption: "Brotherhood", taken_at: "2025-01-14" },
+  { id: "s10", image_url: "https://images.unsplash.com/photo-1591216105468-f02e4c93cc05?q=80&w=1400&auto=format&fit=crop", caption: "Balade de nuit", taken_at: "2024-11-20" },
+  { id: "s11", image_url: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?q=80&w=1400&auto=format&fit=crop", caption: "Fraternité", taken_at: "2025-01-14" },
   { id: "s12", image_url: "https://images.unsplash.com/photo-1611241893603-3c359704e0ee?q=80&w=1400&auto=format&fit=crop", caption: "Garage du club", taken_at: "2025-02-02" },
 ];
 

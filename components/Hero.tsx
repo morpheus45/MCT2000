@@ -51,12 +51,12 @@ export default function Hero() {
         <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest2 text-bone-50/70">
           <span className="inline-flex items-center gap-1">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-flame-500" />
-            REC · LIVE
+            EN DIRECT
           </span>
           <span>·</span>
-          <span>SCENE 26 / MCT 2000</span>
+          <span>SCÈNE 26 / MCT 2000</span>
           <span>·</span>
-          <span>FR-LANGUEDOC</span>
+          <span>CLERMONT-L'HÉRAULT</span>
         </div>
       </motion.div>
 
@@ -135,7 +135,7 @@ export default function Hero() {
       >
         <div className="mx-auto h-10 w-px bg-gradient-to-b from-transparent via-flame-500 to-transparent" />
         <div className="mt-2 font-mono text-[9px] uppercase tracking-widest2 text-bone-50/50">
-          scroll · démarrage
+          défiler · démarrage
         </div>
       </motion.div>
     </section>

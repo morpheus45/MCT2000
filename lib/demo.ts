@@ -130,7 +130,7 @@ export type DemoMessage = {
 
 export const demoChannels = [
   { id: "c1", slug: "general", name: "général", description: "Discussions ouvertes" },
-  { id: "c2", slug: "sorties", name: "sorties", description: "Organiser les rides" },
+  { id: "c2", slug: "sorties", name: "sorties", description: "Organiser les balades" },
   { id: "c3", slug: "meca", name: "mécanique", description: "Entraide technique, pièces, tutos" },
   { id: "c4", slug: "annonces", name: "annonces", description: "Officiel" },
   { id: "c5", slug: "off-topic", name: "off-topic", description: "Hors moto" },
