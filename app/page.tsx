@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
+import CinemaQuote from "@/components/CinemaQuote";
 import FeatureGrid from "@/components/FeatureGrid";
 import Stats from "@/components/Stats";
 import UpcomingTeaser from "@/components/UpcomingTeaser";
@@ -10,6 +11,7 @@ export default function HomePage() {
     <>
       <Hero />
       <Marquee />
+      <CinemaQuote />
       <FeatureGrid />
       <Stats />
       <UpcomingTeaser />

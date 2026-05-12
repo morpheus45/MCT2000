@@ -1,194 +1,158 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import Patch from "./Patch";
+import { ArrowRight, MapPin, Users } from "lucide-react";
+import Wheel from "./Wheel";
 
 export default function Hero() {
-  const today = new Date();
-  const issue = `N° ${String(today.getFullYear() - 1999).padStart(2, "0")}`;
-  const date = today.toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const yText = useTransform(scrollYProgress, [0, 1], ["0%", "-15%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
-    <section className="relative isolate overflow-hidden border-b border-bone-50/10">
-      {/* Backdrop */}
-      <div className="absolute inset-0 -z-10 paper-bg" />
-      <div className="absolute inset-0 -z-10 scanlines opacity-30" />
+    <section ref={ref} className="relative isolate h-[100vh] min-h-[640px] overflow-hidden">
+      {/* Cinematic photographic backdrop with parallax */}
+      <motion.div style={{ y: yBg }} className="absolute inset-0 -z-20">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=2400&auto=format&fit=crop"
+          alt=""
+          className="h-[120%] w-full object-cover object-center brightness-[0.55] saturate-[1.05]"
+        />
+      </motion.div>
 
-      {/* Masthead — magazine header bar */}
-      <div className="border-b border-bone-50/10">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-5 py-3 font-mono text-[11px] uppercase tracking-widest2 text-bone-50/60">
-          <span>Volume XXVI · {issue}</span>
-          <span className="hidden sm:inline">{date}</span>
-          <span>Clermont-l'Hérault · 43.6258°N 3.4422°E</span>
+      {/* Cinematic gradient overlay */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-midnight-900 via-midnight-900/55 to-midnight-900/40" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-midnight-900/95 via-midnight-900/30 to-transparent" />
+      <div className="absolute inset-0 -z-10 scanlines opacity-25" />
+
+      {/* Decorative wheel — far right, partially off-screen, rotates on scroll */}
+      <motion.div style={{ y: yText }} className="pointer-events-none absolute -right-32 top-[18%] hidden lg:block">
+        <Wheel size={620} className="opacity-50 drop-shadow-[0_0_60px_rgba(255,84,16,0.25)]" />
+      </motion.div>
+
+      {/* Cinematic frame markers (corner brackets) */}
+      <div className="pointer-events-none absolute left-6 top-6 h-8 w-8 border-l-2 border-t-2 border-flame-500/70 lg:left-12 lg:top-12" />
+      <div className="pointer-events-none absolute right-6 top-6 h-8 w-8 border-r-2 border-t-2 border-flame-500/70 lg:right-12 lg:top-12" />
+      <div className="pointer-events-none absolute bottom-6 left-6 h-8 w-8 border-b-2 border-l-2 border-flame-500/70 lg:bottom-12 lg:left-12" />
+      <div className="pointer-events-none absolute bottom-6 right-6 h-8 w-8 border-b-2 border-r-2 border-flame-500/70 lg:bottom-12 lg:right-12" />
+
+      {/* Top-bar status — like a cinema slate */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.2 }}
+        className="absolute left-1/2 top-12 z-10 -translate-x-1/2 lg:top-16"
+      >
+        <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest2 text-bone-50/70">
+          <span className="inline-flex items-center gap-1">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-flame-500" />
+            REC · LIVE
+          </span>
+          <span>·</span>
+          <span>SCENE 26 / MCT 2000</span>
+          <span>·</span>
+          <span>FR-LANGUEDOC</span>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="mx-auto grid max-w-7xl items-start gap-10 px-5 pb-24 pt-12 md:pt-16 lg:grid-cols-12">
-        {/* LEFT — editorial copy */}
-        <div className="lg:col-span-7">
-          {/* Stamp */}
-          <motion.div
-            initial={{ opacity: 0, rotate: 8, y: -10 }}
-            animate={{ opacity: 1, rotate: -4, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="stamp mb-6 inline-flex"
-          >
-            <span className="text-sm">Édition spéciale · 2026</span>
-          </motion.div>
+      {/* Hero content */}
+      <motion.div
+        style={{ y: yText, opacity }}
+        className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-center px-5 lg:px-12"
+      >
+        {/* Pre-title */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.3 }}
+          className="mb-6 flex items-center gap-3"
+        >
+          <span className="h-px w-12 bg-flame-500" />
+          <span className="font-mono text-xs uppercase tracking-widest2 text-flame-400">
+            Moto Club · Saison 2026
+          </span>
+        </motion.div>
 
-          {/* Massive layered title */}
-          <h1 className="font-display leading-[0.78] tracking-tight">
-            <motion.span
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              className="block text-[clamp(3.4rem,11vw,9rem)] text-bone-50"
-            >
-              BROTHER<span className="text-flame-500">.</span>
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="block translate-x-4 text-[clamp(3.4rem,11vw,9rem)]"
-            >
-              <span className="editorial text-flame-400">hood</span>
-              <span className="ml-3 inline-block translate-y-2 text-bone-50">,</span>
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="block text-[clamp(3.4rem,11vw,9rem)] text-bone-50"
-            >
-              BIT<span className="editorial -ml-1 text-flame-500">u</span>ME<span className="text-flame-500">,</span>
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="block translate-x-2 text-[clamp(3.4rem,11vw,9rem)]"
-            >
-              <span className="editorial text-bone-50">L</span>
-              <span className="text-flame-500">i</span>
-              <span className="editorial text-bone-50">berté</span>
-              <span className="text-flame-500">.</span>
-            </motion.span>
-          </h1>
-
-          {/* Lede — editorial paragraph */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-10 max-w-xl"
-          >
-            <div className="mb-2 flex items-baseline gap-3">
-              <span className="font-mono text-[10px] uppercase tracking-widest2 text-flame-500">¶ Édito</span>
-              <span className="h-px flex-1 bg-bone-50/15" />
-            </div>
-            <p className="editorial text-xl leading-snug text-bone-50/90 md:text-2xl">
-              «&nbsp;On est <span className="not-italic font-display text-flame-400">131</span> motards, basés à Clermont-l'Hérault.
-              Toutes cylindrées, toutes marques, toutes générations. Ce qui nous rassemble&nbsp;:
-              la passion du <span className="font-display not-italic">deux-roues</span> et la règle d'or — personne ne reste en rade.&nbsp;»
-            </p>
-            <div className="mt-3 font-mono text-[10px] uppercase tracking-widest2 text-bone-50/40">
-              — Bureau du club, depuis 2000
-            </div>
-          </motion.div>
-
-          {/* CTA row */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="mt-10 flex flex-wrap items-center gap-4"
-          >
-            <Link href="/signup" className="btn-primary">
-              Rejoindre le club <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link href="/feed" className="btn-ghost">Lire le feed</Link>
-            <span className="font-mono text-[10px] uppercase tracking-widest2 text-bone-50/40">
-              · 30 sec · pas de cotisation cachée
+        {/* Massive cinematic title — letters rise from below */}
+        <h1 className="font-display leading-[0.82] tracking-tight">
+          <RiseLine delay={0.4}>
+            <span className="block text-[clamp(3rem,11vw,10rem)] text-bone-50">Le bitume</span>
+          </RiseLine>
+          <RiseLine delay={0.55}>
+            <span className="block text-[clamp(3rem,11vw,10rem)]">
+              <span className="editorial text-flame-400">comme</span>
+              <span className="ml-3 text-bone-50">religion.</span>
             </span>
-          </motion.div>
-        </div>
+          </RiseLine>
+        </h1>
 
-        {/* RIGHT — magazine-style asymmetric stack */}
-        <div className="relative lg:col-span-5 lg:pl-6">
-          {/* Top stat card with date stamp */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="relative ml-auto w-[88%] origin-top-right rotate-[1.5deg] border-2 border-bone-50 bg-bone-50 p-5 text-ink-950 shadow-[10px_10px_0_0_#8c1c14]"
-          >
-            <div className="flex items-start justify-between border-b border-ink-950/30 pb-2">
-              <div>
-                <div className="font-mono text-[10px] uppercase tracking-widest2 text-ink-950/60">Tableau de bord</div>
-                <div className="heading text-2xl">Saison 2026</div>
-              </div>
-              <div className="stamp text-[10px]">Ouverte</div>
-            </div>
-            <div className="mt-4 grid grid-cols-3 gap-3 text-center">
-              {[
-                { v: "131", l: "Motards" },
-                { v: "47×", l: "Sorties/an" },
-                { v: "13 ans", l: "Sur FB" },
-              ].map((s) => (
-                <div key={s.l}>
-                  <div className="heading text-3xl text-flame-600">{s.v}</div>
-                  <div className="font-mono text-[9px] uppercase tracking-widest2 text-ink-950/50">{s.l}</div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 border-t border-ink-950/30 pt-2 text-xs">
-              <span className="editorial text-ink-950/80">
-                «&nbsp;Café à 8h45, briefing court, départ 9h.&nbsp;»
-              </span>
-              <div className="mt-1 font-mono text-[9px] uppercase tracking-widest2 text-ink-950/50">Méthode club</div>
-            </div>
-          </motion.div>
-
-          {/* Floating patch — overlapping */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.6, rotate: 0 }}
-            animate={{ opacity: 1, scale: 1, rotate: -10 }}
-            transition={{ duration: 0.8, delay: 0.4, type: "spring" }}
-            className="absolute -left-4 top-32 animate-wobble"
-          >
-            <Patch text="MCT 2000 · CLERMONT L'HÉRAULT · MOTO CLUB ·" size={150} variant="flame" />
-          </motion.div>
-
-          {/* Second card — pull-quote ticket */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.55 }}
-            className="relative ml-6 mt-10 w-[75%] -rotate-[2deg] border-2 border-bone-50 bg-ink-950 p-5 shadow-[8px_8px_0_0_#ff5410]"
-          >
-            <div className="mb-2 flex items-center justify-between font-mono text-[10px] uppercase tracking-widest2 text-bone-50/50">
-              <span>Téléthon · décembre</span>
-              <span>Ticket #42</span>
-            </div>
-            <div className="heading text-3xl text-bone-50">
-              On roule pour <span className="text-flame-500">une cause.</span>
-            </div>
-            <Link href="/telethon" className="mt-3 inline-block font-mono text-[11px] uppercase tracking-widest2 text-flame-400 underline-offset-4 hover:underline">
-              Lire l'article →
-            </Link>
-          </motion.div>
-
-          {/* Issue number — vertical sidebar */}
-          <div className="absolute right-0 top-0 hidden h-full items-center justify-end pr-2 lg:flex">
-            <div className="rotate-180 font-mono text-[10px] uppercase tracking-widest2 text-bone-50/30" style={{ writingMode: "vertical-rl" }}>
-              ISSUE {issue} · MCT 2000 · DEPUIS 2000
-            </div>
+        {/* Sub-quote */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 1.1 }}
+          className="mt-10 max-w-xl"
+        >
+          <p className="editorial text-xl leading-relaxed text-bone-50/85 md:text-2xl">
+            «&nbsp;131 motards. Clermont-l'Hérault.
+            <span className="not-italic font-display text-flame-400"> Une famille.</span>&nbsp;»
+          </p>
+          <div className="mt-3 flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest2 text-bone-50/40">
+            <MapPin className="h-3 w-3" /> 43.6258°N — 3.4422°E
+            <span>·</span>
+            <Users className="h-3 w-3" /> depuis 2000
           </div>
+        </motion.div>
+
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 1.25 }}
+          className="mt-10 flex flex-wrap items-center gap-4"
+        >
+          <Link href="/signup" className="btn-primary">
+            <span>Rejoindre le club</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link href="/feed" className="btn-ghost">
+            Voir le feed live
+          </Link>
+        </motion.div>
+      </motion.div>
+
+      {/* Bottom scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1.6 }}
+        className="absolute bottom-10 left-1/2 z-10 -translate-x-1/2 text-center"
+      >
+        <div className="mx-auto h-10 w-px bg-gradient-to-b from-transparent via-flame-500 to-transparent" />
+        <div className="mt-2 font-mono text-[9px] uppercase tracking-widest2 text-bone-50/50">
+          scroll · démarrage
         </div>
-      </div>
+      </motion.div>
     </section>
+  );
+}
+
+function RiseLine({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  return (
+    <span className="block overflow-hidden">
+      <motion.span
+        initial={{ y: "110%", opacity: 0 }}
+        animate={{ y: "0%", opacity: 1 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay }}
+        className="block"
+      >
+        {children}
+      </motion.span>
+    </span>
   );
 }

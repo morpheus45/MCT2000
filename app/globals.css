@@ -2,19 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap");
 
 :root {
   color-scheme: dark;
 }
 
-html, body {
-  background: #06060a;
-  color: #f5f5f5;
-  -webkit-font-smoothing: antialiased;
+* {
+  cursor: none;
+}
+@media (max-width: 768px), (pointer: coarse) {
+  * { cursor: auto; }
 }
 
-/* Subtle film grain overlay for the whole app */
+html, body {
+  background: #040814;
+  color: #f5f5f5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Film grain overlay */
 body::before {
   content: "";
   position: fixed;
@@ -26,29 +34,44 @@ body::before {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.6'/></svg>");
 }
 
+/* Vignette */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 59;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.65) 100%);
+}
+
 @layer components {
   .glass {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10;
-  }
-  .glass-strong {
-    @apply bg-white/10 backdrop-blur-2xl border border-white/15;
+    @apply bg-white/[.04] backdrop-blur-xl border border-white/10;
   }
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-none px-6 py-3 font-display tracking-widest uppercase text-sm
-           bg-gradient-to-r from-flame-600 to-flame-400 text-ink-950
-           shadow-[6px_6px_0_0_#06060a] border-2 border-ink-950
-           hover:shadow-[3px_3px_0_0_#06060a] hover:translate-x-[3px] hover:translate-y-[3px]
-           transition-all duration-150;
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden px-7 py-3 font-display tracking-widest uppercase text-sm
+           bg-flame-500 text-ink-950
+           transition-all duration-300;
   }
+  .btn-primary::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #ff7a3a 0%, #ff5410 50%, #c72b07 100%);
+    transform: translateX(-101%);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary > * { position: relative; z-index: 1; }
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-none px-6 py-3 font-display tracking-widest uppercase text-sm
-           border-2 border-bone-100 text-bone-50 hover:bg-bone-50 hover:text-ink-950 transition-colors duration-150;
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3 font-display tracking-widest uppercase text-sm
+           border border-bone-50/20 text-bone-50 hover:bg-bone-50 hover:text-ink-950 transition-colors duration-300;
   }
   .chip {
-    @apply inline-flex items-center gap-2 rounded-none border border-bone-50/20 bg-bone-50/[.04] px-3 py-1 font-mono text-[10px] uppercase tracking-widest2 text-bone-50/70;
+    @apply inline-flex items-center gap-2 border border-bone-50/15 bg-bone-50/[.03] px-3 py-1 font-mono text-[10px] uppercase tracking-widest2 text-bone-50/70;
   }
   .input {
-    @apply w-full rounded-none border-2 border-bone-50/20 bg-black/40 px-4 py-3 font-mono text-white outline-none focus:border-flame-500 transition-colors;
+    @apply w-full border-2 border-bone-50/15 bg-black/40 px-4 py-3 font-mono text-white outline-none focus:border-flame-500 transition-colors;
   }
   .heading {
     @apply font-display tracking-wide uppercase;
@@ -59,41 +82,40 @@ body::before {
   .gradient-text {
     @apply bg-gradient-to-r from-flame-200 via-flame-400 to-flame-600 bg-clip-text text-transparent;
   }
+  .brass-text {
+    @apply bg-gradient-to-r from-brass-200 via-brass-400 to-brass-600 bg-clip-text text-transparent;
+  }
   .scanlines {
     background-image: repeating-linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0.03) 0,
-      rgba(255, 255, 255, 0.03) 1px,
+      rgba(255, 255, 255, 0.025) 0,
+      rgba(255, 255, 255, 0.025) 1px,
       transparent 1px,
-      transparent 3px
+      transparent 4px
     );
   }
   .noise-bg {
     background:
-      radial-gradient(60% 60% at 50% 0%, rgba(255, 84, 16, 0.18), transparent 60%),
-      radial-gradient(40% 40% at 90% 90%, rgba(255, 122, 58, 0.12), transparent 70%),
-      linear-gradient(180deg, #06060a 0%, #0a0a12 100%);
+      radial-gradient(70% 70% at 50% 10%, rgba(255, 84, 16, 0.22), transparent 60%),
+      radial-gradient(50% 50% at 100% 90%, rgba(140, 28, 20, 0.18), transparent 70%),
+      linear-gradient(180deg, #040814 0%, #06060a 100%);
   }
   .paper-bg {
     background:
-      radial-gradient(120% 50% at 20% 0%, rgba(255, 84, 16, 0.06), transparent 60%),
-      radial-gradient(40% 50% at 100% 100%, rgba(140, 28, 20, 0.08), transparent 70%),
-      linear-gradient(180deg, #0a0a12 0%, #06060a 100%);
+      radial-gradient(120% 50% at 20% 0%, rgba(255, 84, 16, 0.08), transparent 60%),
+      radial-gradient(50% 60% at 100% 100%, rgba(140, 28, 20, 0.12), transparent 70%),
+      linear-gradient(180deg, #080f1f 0%, #040814 100%);
   }
-  /* Magazine number for section dividers */
-  .mag-number {
-    @apply font-editorial italic text-[clamp(6rem,16vw,14rem)] leading-none text-flame-500/15;
+  .midnight-bg {
+    background:
+      radial-gradient(60% 50% at 50% 0%, rgba(31, 42, 76, 0.6), transparent 70%),
+      radial-gradient(60% 50% at 100% 100%, rgba(255, 84, 16, 0.12), transparent 70%),
+      linear-gradient(180deg, #06060a 0%, #040814 60%, #06060a 100%);
   }
-  /* Polaroid frame */
-  .polaroid {
-    @apply bg-bone-50 p-2 pb-12 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.7)];
-  }
-  /* "Stamp" effect for badges */
   .stamp {
-    @apply inline-flex items-center justify-center font-display uppercase tracking-widest text-blood-500 border-[3px] border-blood-500
+    @apply inline-flex items-center justify-center font-display uppercase tracking-widest text-flame-500 border-[3px] border-flame-500
            px-3 py-1 rotate-[-4deg] opacity-90;
   }
-  /* Ticker / divider with mono caps */
   .divider-rail {
     background-image: repeating-linear-gradient(
       90deg,
@@ -101,22 +123,41 @@ body::before {
       transparent 8px 14px
     );
   }
+  /* Cinematic text mask - inline only — block-level masks must use motion components */
+  .text-mask {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+  .text-mask > * {
+    display: inline-block;
+    animation: rise 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  /* Speed lines pattern */
+  .speedlines {
+    background-image:
+      linear-gradient(110deg, transparent 0%, transparent 48%, rgba(255,84,16,0.35) 49%, rgba(255,84,16,0.35) 51%, transparent 52%, transparent 100%),
+      linear-gradient(110deg, transparent 0%, transparent 70%, rgba(255,255,255,0.15) 71%, rgba(255,255,255,0.15) 72%, transparent 73%, transparent 100%);
+    background-size: 220px 100%;
+  }
+  @keyframes rise {
+    from { transform: translateY(110%); }
+    to { transform: translateY(0); }
+  }
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #06060a;
+  background: #040814;
 }
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #ff5410, #c72b07);
   border-radius: 0;
-  border: 2px solid #06060a;
 }
 
-/* Selection */
 ::selection {
   background: #ff5410;
   color: #06060a;
