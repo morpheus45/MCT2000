@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import DemoBanner from "@/components/DemoBanner";
 import Cursor from "@/components/Cursor";
 import PageReveal from "@/components/PageReveal";
+import AuthErrorBanner from "@/components/AuthErrorBanner";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "/MCT2000";
 
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen flex flex-col bg-ink-950 text-white">
         <PageReveal />
         <Cursor />
+        <AuthErrorBanner />
         <DemoBanner />
         <Navbar />
         <main className="flex-1">{children}</main>
