@@ -26,13 +26,26 @@ returns trigger
 language plpgsql
 security definer set search_path = public
 as $$
+declare
+  v_pseudo text;
+  v_role text;
+  -- Emails that are automatically promoted to admin on first signup.
+  v_admin_emails text[] := array[
+    'cedric.lago@gmail.com',
+    'contact.mct2000@gmail.com'
+  ];
 begin
-  insert into public.profiles (id, pseudo)
-  values (
-    new.id,
-    coalesce(new.raw_user_meta_data->>'pseudo', split_part(new.email, '@', 1))
-  )
-  on conflict (id) do nothing;
+  v_pseudo := coalesce(new.raw_user_meta_data->>'pseudo', split_part(new.email, '@', 1));
+  v_role := case when new.email = any(v_admin_emails) then 'admin' else 'member' end;
+
+  insert into public.profiles (id, pseudo, role)
+  values (new.id, v_pseudo, v_role)
+  on conflict (id) do update
+    set role = case
+      when public.profiles.role = 'member' and excluded.role = 'admin'
+      then 'admin'
+      else public.profiles.role
+    end;
   return new;
 end;
 $$;
