@@ -205,8 +205,15 @@ create policy comments_delete on public.post_comments for delete using (auth.uid
 drop policy if exists events_select on public.events;
 create policy events_select on public.events for select using (true);
 
+-- ---------- Internal helper schema (NOT exposed via PostgREST RPC) ----------
+create schema if not exists private;
+grant usage on schema private to authenticated, anon;
+
 -- Helper : is current user an admin / officer ?
-create or replace function public.is_admin()
+-- Lives in `private` so PostgREST does not expose it as /rest/v1/rpc/is_admin.
+-- RLS policies can still reference private.is_admin() because RLS evaluation
+-- bypasses the schema-based API exposure.
+create or replace function private.is_admin()
 returns boolean
 language sql stable security definer set search_path = public
 as $$
@@ -216,9 +223,13 @@ as $$
   );
 $$;
 
+-- Only authenticated users may invoke it (from inside RLS); anon cannot.
+revoke execute on function private.is_admin() from public, anon;
+grant execute on function private.is_admin() to authenticated;
+
 drop policy if exists events_admin_write on public.events;
 create policy events_admin_write on public.events
-  for all using (public.is_admin()) with check (public.is_admin());
+  for all using (private.is_admin()) with check (private.is_admin());
 
 drop policy if exists rsvps_select on public.event_rsvps;
 create policy rsvps_select on public.event_rsvps for select using (true);
@@ -251,23 +262,18 @@ drop policy if exists gallery_select on public.gallery_photos;
 create policy gallery_select on public.gallery_photos for select using (true);
 drop policy if exists gallery_admin_write on public.gallery_photos;
 create policy gallery_admin_write on public.gallery_photos
-  for all using (public.is_admin()) with check (public.is_admin());
+  for all using (private.is_admin()) with check (private.is_admin());
 
 -- Admins can also post on behalf of the club, edit messages, etc.
 drop policy if exists posts_admin_all on public.posts;
 create policy posts_admin_all on public.posts
-  for all using (public.is_admin()) with check (public.is_admin());
+  for all using (private.is_admin()) with check (private.is_admin());
 
 -- ---------- Function privileges hardening ----------
 -- handle_new_user() is a SECURITY DEFINER trigger function. It only needs to run from
 -- the auth.users INSERT trigger (which fires under supabase_auth_admin / postgres),
 -- not via PostgREST RPC. Revoke direct execution.
 revoke execute on function public.handle_new_user() from anon, authenticated, public;
-
--- is_admin() is SECURITY DEFINER so it can read profiles.role while RLS is on. It must
--- remain callable from RLS policies by signed-in users, but should not be exposed to anon.
-revoke execute on function public.is_admin() from anon, public;
--- (kept granted to `authenticated` so RLS policies resolve)
 
 -- ---------- Realtime ----------
 -- Make sure these tables emit realtime events
