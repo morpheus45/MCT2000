@@ -72,7 +72,8 @@ create index if not exists messages_channel_created_idx
   on public.messages (channel_id, created_at desc);
 
 -- View joining pseudo for client convenience
-create or replace view public.messages_with_pseudo as
+create or replace view public.messages_with_pseudo
+with (security_invoker = true) as
   select m.*, p.pseudo
   from public.messages m
   join public.profiles p on p.id = m.user_id;
@@ -101,8 +102,9 @@ create table if not exists public.post_comments (
   created_at timestamptz default now()
 );
 
--- Aggregated feed view
-create or replace view public.feed_posts as
+-- Aggregated feed view (SECURITY INVOKER: RLS applies for the calling user)
+create or replace view public.feed_posts
+with (security_invoker = true) as
   select
     p.id,
     p.user_id,
@@ -224,8 +226,9 @@ drop policy if exists rsvps_all on public.event_rsvps;
 create policy rsvps_all on public.event_rsvps for all
   using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
--- View: events with rsvp count + my status
-create or replace view public.events_with_counts as
+-- View: events with rsvp count + my status (SECURITY INVOKER: RLS applies)
+create or replace view public.events_with_counts
+with (security_invoker = true) as
   select
     e.*,
     coalesce((select count(*) from public.event_rsvps r where r.event_id = e.id and r.status = 'going'), 0)::int as going_count,
@@ -254,6 +257,17 @@ create policy gallery_admin_write on public.gallery_photos
 drop policy if exists posts_admin_all on public.posts;
 create policy posts_admin_all on public.posts
   for all using (public.is_admin()) with check (public.is_admin());
+
+-- ---------- Function privileges hardening ----------
+-- handle_new_user() is a SECURITY DEFINER trigger function. It only needs to run from
+-- the auth.users INSERT trigger (which fires under supabase_auth_admin / postgres),
+-- not via PostgREST RPC. Revoke direct execution.
+revoke execute on function public.handle_new_user() from anon, authenticated, public;
+
+-- is_admin() is SECURITY DEFINER so it can read profiles.role while RLS is on. It must
+-- remain callable from RLS policies by signed-in users, but should not be exposed to anon.
+revoke execute on function public.is_admin() from anon, public;
+-- (kept granted to `authenticated` so RLS policies resolve)
 
 -- ---------- Realtime ----------
 -- Make sure these tables emit realtime events
