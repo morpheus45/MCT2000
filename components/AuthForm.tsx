@@ -2,17 +2,44 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Flame, Loader2, Mail } from "lucide-react";
 import { getSupabaseBrowser, supabaseConfigured } from "@/lib/supabase/client";
 
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "/MCT2000";
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (typeof window !== "undefined" ? window.location.origin + (process.env.NEXT_PUBLIC_BASE_PATH ?? "/MCT2000") : "https://morpheus45.github.io/MCT2000");
+  typeof window !== "undefined"
+    ? window.location.origin + BASE_PATH
+    : "https://morpheus45.github.io/MCT2000";
+
+// Hard navigation that respects the static export basePath.
+function goTo(path: string) {
+  if (typeof window === "undefined") return;
+  window.location.href = BASE_PATH + path.replace(/^\/+/, "/");
+}
+
+// Wraps a promise with a 12s timeout — prevents the spinner from spinning forever
+// if the auth request silently hangs (network glitch, service-worker interference, etc.)
+function withTimeout<T>(p: Promise<T>, ms = 12_000): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const t = setTimeout(
+      () => reject(new Error("Délai dépassé. Réessaie ou vide le cache (Ctrl+Shift+R).")),
+      ms,
+    );
+    p.then(
+      (v) => {
+        clearTimeout(t);
+        resolve(v);
+      },
+      (e) => {
+        clearTimeout(t);
+        reject(e);
+      },
+    );
+  });
+}
 
 export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [pseudo, setPseudo] = useState("");
@@ -35,30 +62,34 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
     setBusy(true);
     try {
       if (isSignup) {
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: { pseudo },
-            emailRedirectTo: SITE_URL,
-          },
-        });
+        const { data, error } = await withTimeout(
+          supabase.auth.signUp({
+            email,
+            password,
+            options: { data: { pseudo }, emailRedirectTo: SITE_URL },
+          }),
+        );
         if (error) throw error;
         if (data.user && !data.session) {
           setMsg("Compte créé. Vérifie ta boîte mail pour confirmer (lien valide 24h).");
+          setBusy(false);
         } else {
-          router.push("/feed");
-          router.refresh();
+          goTo("/feed/");
         }
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await withTimeout(
+          supabase.auth.signInWithPassword({ email, password }),
+        );
         if (error) throw error;
-        router.push("/feed");
-        router.refresh();
+        if (data.session) {
+          setMsg("Connecté ! Redirection…");
+          goTo("/feed/");
+        } else {
+          throw new Error("Connexion sans session — réessaie.");
+        }
       }
     } catch (e: unknown) {
       setErr(e instanceof Error ? e.message : "Erreur inconnue");
-    } finally {
       setBusy(false);
     }
   }
@@ -74,11 +105,13 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
     if (!supabase) return;
     setBusy(true);
     try {
-      const { error } = await supabase.auth.resend({
-        type: "signup",
-        email,
-        options: { emailRedirectTo: SITE_URL },
-      });
+      const { error } = await withTimeout(
+        supabase.auth.resend({
+          type: "signup",
+          email,
+          options: { emailRedirectTo: SITE_URL },
+        }),
+      );
       if (error) throw error;
       setMsg("Email de confirmation renvoyé. Vérifie ta boîte (et les spams).");
     } catch (e: unknown) {
