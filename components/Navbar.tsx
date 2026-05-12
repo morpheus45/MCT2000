@@ -3,59 +3,61 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Flame, MessageSquare, Calendar, Users, Newspaper, Map, Image as ImageIcon, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UserMenu from "./UserMenu";
 
 const links = [
-  { href: "/feed", label: "Feed", icon: Newspaper },
-  { href: "/chat", label: "Chat", icon: MessageSquare },
-  { href: "/events", label: "Sorties", icon: Calendar },
-  { href: "/rides", label: "Routes", icon: Map },
-  { href: "/gallery", label: "Galerie", icon: ImageIcon },
-  { href: "/telethon", label: "Téléthon", icon: Heart },
-  { href: "/members", label: "Membres", icon: Users },
+  { href: "/feed", label: "Feed" },
+  { href: "/chat", label: "Chat" },
+  { href: "/events", label: "Sorties" },
+  { href: "/rides", label: "Routes" },
+  { href: "/gallery", label: "Galerie" },
+  { href: "/telethon", label: "Téléthon" },
+  { href: "/members", label: "Membres" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
   return (
-    <header className="sticky top-0 z-50 border-b border-white/5 bg-ink-950/70 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b-2 border-bone-50/10 bg-ink-950/85 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 py-3">
+        {/* Logo / Masthead-style brand */}
         <Link href="/" className="group flex items-center gap-3">
           <motion.div
-            whileHover={{ rotate: -10, scale: 1.05 }}
-            className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-flame-500 to-flame-700 shadow-[0_0_20px_-2px_rgba(255,84,16,0.7)]"
+            whileHover={{ rotate: -8, scale: 1.05 }}
+            className="grid h-11 w-11 place-items-center border-2 border-flame-500 bg-flame-500 font-display text-ink-950"
           >
-            <Flame className="h-5 w-5 text-white" />
+            <span className="text-lg leading-none">MC</span>
           </motion.div>
           <div className="leading-none">
-            <div className="heading text-2xl tracking-[0.18em] gradient-text">MCT 2000</div>
-            <div className="text-[10px] uppercase tracking-[0.3em] text-white/40">
-              moto club · depuis 2000
+            <div className="heading text-2xl tracking-[0.14em] text-bone-50">
+              MCT <span className="editorial text-flame-400">2000</span>
+            </div>
+            <div className="mt-0.5 font-mono text-[9px] uppercase tracking-widest2 text-bone-50/40">
+              moto club · clermont-l'hérault
             </div>
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex">
-          {links.map(({ href, label, icon: Icon }) => {
+        {/* Nav links — magazine-style index */}
+        <nav className="hidden items-center gap-1 lg:flex">
+          {links.map(({ href, label }, i) => {
             const active = pathname === href || (href !== "/" && pathname.startsWith(href));
             return (
               <Link
                 key={href}
                 href={href}
                 className={cn(
-                  "relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                  active ? "text-white" : "text-white/60 hover:text-white",
+                  "group relative px-3 py-2 font-mono text-[11px] uppercase tracking-widest2 transition-colors",
+                  active ? "text-flame-400" : "text-bone-50/60 hover:text-bone-50",
                 )}
               >
-                <Icon className="h-4 w-4" />
+                <span className="text-bone-50/30 mr-1">{String(i + 1).padStart(2, "0")}</span>
                 {label}
                 {active && (
                   <motion.span
                     layoutId="nav-underline"
-                    className="absolute inset-0 -z-10 rounded-full border border-flame-500/40 bg-flame-500/10"
-                    transition={{ type: "spring", stiffness: 320, damping: 30 }}
+                    className="absolute -bottom-1 left-2 right-2 h-px bg-flame-500"
                   />
                 )}
               </Link>

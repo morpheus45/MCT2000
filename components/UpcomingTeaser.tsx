@@ -3,69 +3,84 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Users } from "lucide-react";
+import NumberDivider from "./NumberDivider";
 
 const upcoming = [
   {
     date: "24 mai",
-    title: "Balade entre filles — Lac du Salagou",
-    where: "Clermont-l'Hérault → Salagou (boucle)",
+    title: "Balade entre filles",
+    where: "Salagou (boucle)",
     riders: 12,
     img: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1200&auto=format&fit=crop",
+    rotate: -3,
   },
   {
     date: "7 juin",
-    title: "Sortie dominicale — Cirque de Mourèze",
-    where: "Départ place de la Mairie, 9h",
+    title: "Sortie dominicale",
+    where: "Cirque de Mourèze",
     riders: 18,
     img: "https://images.unsplash.com/photo-1547549082-6bc09f2049ae?q=80&w=1200&auto=format&fit=crop",
+    rotate: 2,
   },
   {
     date: "5 déc.",
-    title: "Téléthon — balade caritative",
-    where: "Clermont-l'Hérault, dons AFM",
+    title: "Téléthon",
+    where: "Caritative · 100 km",
     riders: 42,
     img: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?q=80&w=1200&auto=format&fit=crop",
+    rotate: -1.5,
   },
 ];
 
 export default function UpcomingTeaser() {
   return (
-    <section className="mx-auto max-w-7xl px-5 py-24">
-      <div className="mb-12 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <div className="chip mb-4">Prochaines sorties</div>
-          <h2 className="heading text-5xl md:text-6xl">À l'affiche.</h2>
-        </div>
-        <Link href="/events" className="btn-ghost">Voir tout le calendrier</Link>
-      </div>
+    <section className="py-24">
+      <NumberDivider number="03" kicker="Au programme" label="Les prochaines sorties." />
 
-      <div className="grid gap-5 md:grid-cols-3">
-        {upcoming.map((e, i) => (
-          <motion.article
-            key={e.title}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="group relative overflow-hidden rounded-2xl border border-white/10 bg-ink-800"
-          >
-            <div
-              className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-              style={{ backgroundImage: `url(${e.img})` }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/40 to-transparent" />
-            <div className="absolute left-4 top-4 chip bg-flame-500/80 text-black border-0">
-              <Calendar className="h-3 w-3" /> {e.date}
-            </div>
-            <div className="absolute bottom-0 left-0 right-0 p-5">
-              <h3 className="heading text-2xl text-white">{e.title}</h3>
-              <div className="mt-2 flex flex-wrap gap-3 text-xs text-white/70">
-                <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {e.where}</span>
-                <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {e.riders} inscrits</span>
+      <div className="mx-auto mt-12 max-w-7xl px-5">
+        <div className="grid gap-12 md:grid-cols-3">
+          {upcoming.map((e, i) => (
+            <motion.article
+              key={e.title}
+              initial={{ opacity: 0, y: 30, rotate: 0 }}
+              whileInView={{ opacity: 1, y: 0, rotate: e.rotate }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: i * 0.12 }}
+              whileHover={{ rotate: 0, scale: 1.02 }}
+              className="polaroid relative cursor-pointer"
+            >
+              {/* Tape strip on top */}
+              <div
+                className="absolute left-1/2 top-[-14px] z-10 h-7 w-24 -translate-x-1/2 bg-flame-300/70 shadow-md"
+                style={{ transform: "translateX(-50%) rotate(-3deg)", clipPath: "polygon(0 0, 100% 0, 96% 100%, 4% 100%)" }}
+              />
+              <div
+                className="aspect-[4/3] w-full bg-cover bg-center"
+                style={{ backgroundImage: `url(${e.img})` }}
+              />
+              <div className="absolute bottom-0 left-0 right-0 px-3 pb-3 pt-2 text-ink-950">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[10px] uppercase tracking-widest2 text-flame-700">
+                    {e.date}
+                  </span>
+                  <span className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-widest2 text-ink-950/60">
+                    <Users className="h-3 w-3" /> {e.riders}
+                  </span>
+                </div>
+                <div className="heading text-xl tracking-wide">{e.title}</div>
+                <div className="flex items-center gap-1 font-editorial italic text-sm text-ink-950/70">
+                  <MapPin className="h-3 w-3" /> {e.where}
+                </div>
               </div>
-            </div>
-          </motion.article>
-        ))}
+            </motion.article>
+          ))}
+        </div>
+
+        <div className="mt-16 flex justify-center">
+          <Link href="/events" className="btn-ghost">
+            <Calendar className="h-4 w-4" /> Tout le calendrier
+          </Link>
+        </div>
       </div>
     </section>
   );

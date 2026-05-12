@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap");
 
 :root {
   color-scheme: dark;
@@ -21,7 +21,7 @@ body::before {
   inset: 0;
   pointer-events: none;
   z-index: 60;
-  opacity: 0.05;
+  opacity: 0.06;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.6'/></svg>");
 }
@@ -34,24 +34,27 @@ body::before {
     @apply bg-white/10 backdrop-blur-2xl border border-white/15;
   }
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-semibold tracking-wide
-           bg-gradient-to-r from-flame-600 to-flame-400 text-white
-           shadow-[0_0_30px_-5px_rgba(255,84,16,0.7)]
-           hover:shadow-[0_0_40px_-2px_rgba(255,84,16,0.9)] hover:-translate-y-0.5
-           transition-all duration-300;
+    @apply inline-flex items-center justify-center gap-2 rounded-none px-6 py-3 font-display tracking-widest uppercase text-sm
+           bg-gradient-to-r from-flame-600 to-flame-400 text-ink-950
+           shadow-[6px_6px_0_0_#06060a] border-2 border-ink-950
+           hover:shadow-[3px_3px_0_0_#06060a] hover:translate-x-[3px] hover:translate-y-[3px]
+           transition-all duration-150;
   }
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-semibold tracking-wide
-           border border-white/15 text-white/90 hover:bg-white/5 transition-colors;
+    @apply inline-flex items-center justify-center gap-2 rounded-none px-6 py-3 font-display tracking-widest uppercase text-sm
+           border-2 border-bone-100 text-bone-50 hover:bg-bone-50 hover:text-ink-950 transition-colors duration-150;
   }
   .chip {
-    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white/70;
+    @apply inline-flex items-center gap-2 rounded-none border border-bone-50/20 bg-bone-50/[.04] px-3 py-1 font-mono text-[10px] uppercase tracking-widest2 text-bone-50/70;
   }
   .input {
-    @apply w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-white outline-none focus:border-flame-500;
+    @apply w-full rounded-none border-2 border-bone-50/20 bg-black/40 px-4 py-3 font-mono text-white outline-none focus:border-flame-500 transition-colors;
   }
   .heading {
     @apply font-display tracking-wide uppercase;
+  }
+  .editorial {
+    @apply font-editorial italic font-normal;
   }
   .gradient-text {
     @apply bg-gradient-to-r from-flame-200 via-flame-400 to-flame-600 bg-clip-text text-transparent;
@@ -71,6 +74,33 @@ body::before {
       radial-gradient(40% 40% at 90% 90%, rgba(255, 122, 58, 0.12), transparent 70%),
       linear-gradient(180deg, #06060a 0%, #0a0a12 100%);
   }
+  .paper-bg {
+    background:
+      radial-gradient(120% 50% at 20% 0%, rgba(255, 84, 16, 0.06), transparent 60%),
+      radial-gradient(40% 50% at 100% 100%, rgba(140, 28, 20, 0.08), transparent 70%),
+      linear-gradient(180deg, #0a0a12 0%, #06060a 100%);
+  }
+  /* Magazine number for section dividers */
+  .mag-number {
+    @apply font-editorial italic text-[clamp(6rem,16vw,14rem)] leading-none text-flame-500/15;
+  }
+  /* Polaroid frame */
+  .polaroid {
+    @apply bg-bone-50 p-2 pb-12 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.7)];
+  }
+  /* "Stamp" effect for badges */
+  .stamp {
+    @apply inline-flex items-center justify-center font-display uppercase tracking-widest text-blood-500 border-[3px] border-blood-500
+           px-3 py-1 rotate-[-4deg] opacity-90;
+  }
+  /* Ticker / divider with mono caps */
+  .divider-rail {
+    background-image: repeating-linear-gradient(
+      90deg,
+      rgba(255, 84, 16, 0.6) 0 8px,
+      transparent 8px 14px
+    );
+  }
 }
 
 ::-webkit-scrollbar {
@@ -82,6 +112,12 @@ body::before {
 }
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #ff5410, #c72b07);
-  border-radius: 999px;
+  border-radius: 0;
   border: 2px solid #06060a;
+}
+
+/* Selection */
+::selection {
+  background: #ff5410;
+  color: #06060a;
 }
