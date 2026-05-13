@@ -20,6 +20,7 @@ export default function Hero() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=2400&auto=format&fit=crop"
+          /* moto silhouette au coucher de soleil — confirmé moto */
           alt=""
           className="h-[120%] w-full object-cover object-center brightness-[0.85] saturate-[1.15]"
         />

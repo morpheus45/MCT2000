@@ -12,20 +12,21 @@ type Photo = {
   taken_at: string | null;
 };
 
-// Curated motorcycle photos (Unsplash — free license)
+// Verified motorcycle-only photos (Unsplash, free license).
+// Used as the seed gallery until admins upload real club photos.
 const seedPhotos: Photo[] = [
-  { id: "s1", image_url: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1400&auto=format&fit=crop", caption: "Verdon — sortie matinale", taken_at: "2025-05-18" },
-  { id: "s2", image_url: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1400&auto=format&fit=crop", caption: "Atelier chaîne & pignons", taken_at: "2025-05-25" },
-  { id: "s3", image_url: "https://images.unsplash.com/photo-1547549082-6bc09f2049ae?q=80&w=1400&auto=format&fit=crop", caption: "Col de la Bonette", taken_at: "2025-06-01" },
-  { id: "s4", image_url: "https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1400&auto=format&fit=crop", caption: "Le Galibier en boucle", taken_at: "2024-07-12" },
-  { id: "s5", image_url: "https://images.unsplash.com/photo-1465447142348-e9952c393450?q=80&w=1400&auto=format&fit=crop", caption: "Route des Crêtes — Vosges", taken_at: "2024-08-04" },
-  { id: "s6", image_url: "https://images.unsplash.com/photo-1504805572947-34fad45aed93?q=80&w=1400&auto=format&fit=crop", caption: "Corniche d'Or", taken_at: "2024-09-15" },
-  { id: "s7", image_url: "https://images.unsplash.com/photo-1474401869869-9fe17f9b0a6f?q=80&w=1400&auto=format&fit=crop", caption: "Mont Aigoual — Cévennes", taken_at: "2025-03-22" },
-  { id: "s8", image_url: "https://images.unsplash.com/photo-1517400508447-f8dd518b86db?q=80&w=1400&auto=format&fit=crop", caption: "Cols Pyrénéens", taken_at: "2025-04-10" },
-  { id: "s9", image_url: "https://images.unsplash.com/photo-1502980426475-b83966705988?q=80&w=1400&auto=format&fit=crop", caption: "Forêt de Brocéliande", taken_at: "2024-10-08" },
-  { id: "s10", image_url: "https://images.unsplash.com/photo-1591216105468-f02e4c93cc05?q=80&w=1400&auto=format&fit=crop", caption: "Balade de nuit", taken_at: "2024-11-20" },
-  { id: "s11", image_url: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?q=80&w=1400&auto=format&fit=crop", caption: "Fraternité", taken_at: "2025-01-14" },
-  { id: "s12", image_url: "https://images.unsplash.com/photo-1611241893603-3c359704e0ee?q=80&w=1400&auto=format&fit=crop", caption: "Garage du club", taken_at: "2025-02-02" },
+  { id: "s1", image_url: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1400&auto=format&fit=crop", caption: "Coucher de soleil — sortie matinale", taken_at: "2025-05-18" },
+  { id: "s2", image_url: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1400&auto=format&fit=crop", caption: "Atelier — chrome & chaîne", taken_at: "2025-05-25" },
+  { id: "s3", image_url: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?q=80&w=1400&auto=format&fit=crop", caption: "Le club en groupe", taken_at: "2025-06-01" },
+  { id: "s4", image_url: "https://images.unsplash.com/photo-1591216105468-f02e4c93cc05?q=80&w=1400&auto=format&fit=crop", caption: "Café racer du club", taken_at: "2024-07-12" },
+  { id: "s5", image_url: "https://images.unsplash.com/photo-1572452571879-3d67d5b2a39f?q=80&w=1400&auto=format&fit=crop", caption: "Casque & route", taken_at: "2024-08-04" },
+  { id: "s6", image_url: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=1400&auto=format&fit=crop", caption: "Harley sur le bitume", taken_at: "2024-09-15" },
+  { id: "s7", image_url: "https://images.unsplash.com/photo-1609630875171-b1321377ee65?q=80&w=1400&auto=format&fit=crop", caption: "Sportive à l'arrêt", taken_at: "2025-03-22" },
+  { id: "s8", image_url: "https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?q=80&w=1400&auto=format&fit=crop", caption: "Naked bike — détail", taken_at: "2025-04-10" },
+  { id: "s9", image_url: "https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?q=80&w=1400&auto=format&fit=crop", caption: "KTM en bord de route", taken_at: "2024-10-08" },
+  { id: "s10", image_url: "https://images.unsplash.com/photo-1611241893603-3c359704e0ee?q=80&w=1400&auto=format&fit=crop", caption: "Garage du club", taken_at: "2024-11-20" },
+  { id: "s11", image_url: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1400&auto=format&fit=crop&sat=-30", caption: "Chrome", taken_at: "2025-01-14" },
+  { id: "s12", image_url: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?q=80&w=1400&auto=format&fit=crop&blur=0", caption: "Fraternité moto", taken_at: "2025-02-02" },
 ];
 
 export default function GalleryClient() {
@@ -73,7 +74,7 @@ export default function GalleryClient() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={p.image_url}
-              alt={p.caption ?? "Photo MCT 2000"}
+              alt={p.caption ?? "Photo moto MCT 2000"}
               loading="lazy"
               className="w-full transition-transform duration-700 group-hover:scale-105"
             />

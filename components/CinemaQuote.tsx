@@ -15,7 +15,7 @@ export default function CinemaQuote() {
       <motion.div style={{ y: yBg }} className="absolute inset-0 -z-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="https://images.unsplash.com/photo-1547549082-6bc09f2049ae?q=80&w=2400&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1572452571879-3d67d5b2a39f?q=80&w=2400&auto=format&fit=crop"
           alt=""
           className="h-[120%] w-full object-cover object-center brightness-[0.78] saturate-[1.1]"
         />

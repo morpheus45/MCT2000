@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { MapPin, Users, ArrowUpRight, Calendar } from "lucide-react";
 
+// Verified motorcycle photos only
 const upcoming = [
   {
     date: "24",
@@ -12,7 +13,7 @@ const upcoming = [
     where: "Salagou — boucle 60 km",
     riders: 12,
     level: "Facile",
-    img: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1400&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1572452571879-3d67d5b2a39f?q=80&w=1400&auto=format&fit=crop",
   },
   {
     date: "07",
@@ -21,7 +22,7 @@ const upcoming = [
     where: "Cirque de Mourèze",
     riders: 18,
     level: "Facile",
-    img: "https://images.unsplash.com/photo-1547549082-6bc09f2049ae?q=80&w=1400&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1400&auto=format&fit=crop",
   },
   {
     date: "05",

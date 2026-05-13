@@ -287,7 +287,7 @@ function CreatePost() {
 function AddGalleryPhoto() {
   const supabase = useMemo(() => getSupabaseBrowser(), []);
   const [imageUrl, setImageUrl] = useState(
-    isDemo ? "https://images.unsplash.com/photo-1547549082-6bc09f2049ae?q=80&w=1400" : "",
+    isDemo ? "https://images.unsplash.com/photo-1571068316344-75bc76f77890?q=80&w=1400" : "",
   );
   const [caption, setCaption] = useState(isDemo ? "Sortie Téléthon 2025 — départ devant la Mairie" : "");
   const [takenAt, setTakenAt] = useState(isDemo ? "2025-12-06" : "");
@@ -357,7 +357,7 @@ function FacebookImport() {
       : "",
   );
   const [imageUrl, setImageUrl] = useState(
-    isDemo ? "https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1200" : "",
+    isDemo ? "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1200" : "",
   );
   const [busy, setBusy] = useState(false);
   const [ok, setOk] = useState(false);

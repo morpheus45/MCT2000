@@ -64,7 +64,7 @@ export const demoPosts: DemoPost[] = [
     pseudo: "Sophie",
     content:
       "Magnifique balade au Salagou ce matin ! 14 motos au départ, soleil, virages propres, et café au Vailhan à 11h. Merci à tous d'avoir respecté les distances dans les virages 🔥",
-    image_url: "https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1200&auto=format&fit=crop",
+    image_url: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1200&auto=format&fit=crop",
     created_at: new Date(Date.now() - 86_400_000 * 1).toISOString(),
     like_count: 23,
     comment_count: 7,

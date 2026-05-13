@@ -11,7 +11,7 @@ export default function CTA() {
       <div className="absolute inset-0 -z-20">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=2400&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?q=80&w=2400&auto=format&fit=crop"
           alt=""
           className="h-full w-full object-cover object-center brightness-[0.72] saturate-[1.15]"
         />

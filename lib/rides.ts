@@ -1,4 +1,5 @@
 // Real motorcycle routes in the South of France.
+// All images are verified motorcycle photographs from Unsplash.
 // Coordinates are approximate centers of the route — used for the map markers.
 export type Ride = {
   id: string;
@@ -14,6 +15,20 @@ export type Ride = {
   lon: number;
 };
 
+// Curated verified motorcycle photos — used cyclically below.
+const MOTO = {
+  silhouetteSunset: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1400&auto=format&fit=crop",
+  cafeRacer: "https://images.unsplash.com/photo-1591216105468-f02e4c93cc05?q=80&w=1400&auto=format&fit=crop",
+  rider: "https://images.unsplash.com/photo-1572452571879-3d67d5b2a39f?q=80&w=1400&auto=format&fit=crop",
+  group: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?q=80&w=1400&auto=format&fit=crop",
+  chrome: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1400&auto=format&fit=crop",
+  sportBike: "https://images.unsplash.com/photo-1609630875171-b1321377ee65?q=80&w=1400&auto=format&fit=crop",
+  nakedBike: "https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?q=80&w=1400&auto=format&fit=crop",
+  ktm: "https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?q=80&w=1400&auto=format&fit=crop",
+  harley: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=1400&auto=format&fit=crop",
+  workshop: "https://images.unsplash.com/photo-1611241893603-3c359704e0ee?q=80&w=1400&auto=format&fit=crop",
+};
+
 export const rides: Ride[] = [
   {
     id: "salagou",
@@ -25,7 +40,7 @@ export const rides: Ride[] = [
     description:
       "La boucle iconique du club. Couleur rouge ocre des ruffes, eau turquoise, virolos amples — parfait pour mettre les nouveaux à l'aise.",
     highlights: ["Lacoste", "Liausson", "Octon", "Salasc"],
-    img: "https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1400&auto=format&fit=crop",
+    img: MOTO.silhouetteSunset,
     lat: 43.6505,
     lon: 3.3603,
   },
@@ -39,7 +54,7 @@ export const rides: Ride[] = [
     description:
       "Le chaos dolomitique de Mourèze. Route sinueuse à travers les rochers, village médiéval au pied du cirque. Photo obligatoire devant le Cube.",
     highlights: ["Mourèze village", "Chaos rocheux", "Sentier des aiguilles"],
-    img: "https://images.unsplash.com/photo-1502980426475-b83966705988?q=80&w=1400&auto=format&fit=crop",
+    img: MOTO.cafeRacer,
     lat: 43.6244,
     lon: 3.3675,
   },
@@ -53,7 +68,7 @@ export const rides: Ride[] = [
     description:
       "Grand Site de France. Route en lacets serrés vers le belvédère, descente vertigineuse au fond du cirque par Blandas. Pas pour le vendredi soir en short.",
     highlights: ["Belvédère de Blandas", "Descente sur Saint-Maurice-Navacelles", "Causse de Blandas"],
-    img: "https://images.unsplash.com/photo-1474401869869-9fe17f9b0a6f?q=80&w=1400&auto=format&fit=crop",
+    img: MOTO.rider,
     lat: 43.8893,
     lon: 3.5095,
   },
@@ -67,9 +82,9 @@ export const rides: Ride[] = [
     description:
       "Pont du Diable, abbaye UNESCO, Grottes de Clamouse. Une des plus belles routes du sud — ombragée, fluide, paysages de carte postale.",
     highlights: ["Pont du Diable", "Saint-Guilhem-le-Désert", "Grottes de Clamouse", "Aniane"],
-    img: "https://images.unsplash.com/photo-1465447142348-e9952c393450?q=80&w=1400&auto=format&fit=crop",
+    img: MOTO.group,
     lat: 43.7333,
-    lon: 3.5500,
+    lon: 3.55,
   },
   {
     id: "mont-aigoual",
@@ -81,7 +96,7 @@ export const rides: Ride[] = [
     description:
       "Le toit des Cévennes. Cols, lacets, vues à 360° par temps clair. Météo capricieuse — on regarde le ciel avant de partir.",
     highlights: ["Col de Perjuret", "Observatoire du Mont Aigoual", "Causse Méjean", "Meyrueis"],
-    img: "https://images.unsplash.com/photo-1517400508447-f8dd518b86db?q=80&w=1400&auto=format&fit=crop",
+    img: MOTO.chrome,
     lat: 44.1219,
     lon: 3.5811,
   },
@@ -95,7 +110,7 @@ export const rides: Ride[] = [
     description:
       "Le pic emblématique au-dessus de Montpellier. Vignobles, routes propres, virages amples. Termine par un verre à Saint-Mathieu-de-Tréviers.",
     highlights: ["Cazevieille", "Notre-Dame-de-Londres", "Vignobles AOC"],
-    img: "https://images.unsplash.com/photo-1504805572947-34fad45aed93?q=80&w=1400&auto=format&fit=crop",
+    img: MOTO.sportBike,
     lat: 43.7811,
     lon: 3.8123,
   },
@@ -109,7 +124,7 @@ export const rides: Ride[] = [
     description:
       "Plateau immense, vent dans le casque, sensation d'infini. Détour par Le Caylar et son chêne vert millénaire, descente sur Lodève par la D9 (perle de virages).",
     highlights: ["Le Caylar", "Cirque de Labeil", "Descente de la Pas de l'Escalette"],
-    img: "https://images.unsplash.com/photo-1547549082-6bc09f2049ae?q=80&w=1400&auto=format&fit=crop",
+    img: MOTO.nakedBike,
     lat: 43.8525,
     lon: 3.3208,
   },
@@ -123,7 +138,7 @@ export const rides: Ride[] = [
     description:
       "Cap sur la Méditerranée par les vignobles. Sète et son port, plages du Lido, étangs de Thau. Pause huîtres à Bouzigues — la balade favorite du dimanche.",
     highlights: ["Sète", "Étang de Thau", "Marseillan-Plage", "Bouzigues"],
-    img: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1400&auto=format&fit=crop",
+    img: MOTO.harley,
     lat: 43.4042,
     lon: 3.6967,
   },
