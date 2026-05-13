@@ -21,7 +21,7 @@ export default function RidesClient() {
       <div className="mb-10">
         <div className="chip mb-3">Bibliothèque</div>
         <h1 className="heading text-6xl">
-          Les routes du club <span className="gradient-text">autour de Clermont-l'Hérault.</span>
+          Les routes du club <span className="gradient-text">dans le sud.</span>
         </h1>
         <p className="mt-3 max-w-2xl text-white/60">
           Sélection des meilleurs itinéraires moto du Languedoc et au-delà. Du Salagou à 15 min, au

@@ -66,7 +66,7 @@ export default function CTA() {
         </motion.div>
 
         <div className="mt-16 font-mono text-[10px] uppercase tracking-widest2 text-bone-50/30">
-          Moto Club MCT 2000 · Clermont-l'Hérault · Depuis l'an 2000
+          Moto Club MCT 2000 · Depuis l'an 2000
         </div>
       </div>
     </section>

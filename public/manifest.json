@@ -1,7 +1,7 @@
 {
   "name": "Moto Club MCT 2000",
   "short_name": "MCT 2000",
-  "description": "Le club moto de Clermont-l'Hérault — sorties, chat, feed, Téléthon.",
+  "description": "Le Moto Club MCT 2000 — sorties, chat, feed, Téléthon. Depuis l'an 2000.",
   "start_url": "/MCT2000/",
   "scope": "/MCT2000/",
   "display": "standalone",

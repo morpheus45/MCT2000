@@ -148,7 +148,7 @@ function CreateEvent() {
     isDemo ? new Date(Date.now() + 86_400_000 * 14).toISOString().slice(0, 10) : "",
   );
   const [time, setTime] = useState("09:00");
-  const [where, setWhere] = useState(isDemo ? "Café du marché, Clermont-l'Hérault" : "");
+  const [where, setWhere] = useState(isDemo ? "Café du marché — point de RDV club" : "");
   const [distance, setDistance] = useState<number | "">(isDemo ? 90 : "");
   const [level, setLevel] = useState("Facile");
   const [desc, setDesc] = useState(

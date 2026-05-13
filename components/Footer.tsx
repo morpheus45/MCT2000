@@ -19,7 +19,7 @@ export default function Footer() {
             MCT <span className="editorial text-flame-400">2000</span>
           </div>
           <p className="mt-3 max-w-sm editorial text-bone-50/70">
-            «&nbsp;Fraternité. Bitume. Liberté. Depuis l'an 2000, on roule ensemble&nbsp;» — depuis Clermont-l'Hérault.
+            «&nbsp;Fraternité. Bitume. Liberté. Depuis l'an 2000, on roule ensemble.&nbsp;»
           </p>
           <div className="mt-5 flex gap-2">
             <a aria-label="Facebook" href="https://www.facebook.com/groups/531676370210673/" target="_blank" rel="noreferrer" className="border border-bone-50/15 p-2 hover:bg-flame-500 hover:border-flame-500 hover:text-ink-950 transition-colors">

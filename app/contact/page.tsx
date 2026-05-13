@@ -1,4 +1,4 @@
-import { Facebook, MapPin, Mail, MessageSquare, Users } from "lucide-react";
+import { Facebook, Mail, MessageSquare, Users } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = { title: "Contact · Moto Club MCT 2000" };
@@ -61,24 +61,18 @@ export default function ContactPage() {
 
       <div className="mt-12 grid gap-4 sm:grid-cols-2">
         <div className="rounded-2xl border border-white/10 bg-ink-900/60 p-5">
-          <MapPin className="mb-2 h-5 w-5 text-flame-400" />
-          <div className="text-xs uppercase tracking-[0.25em] text-white/40">Base du club</div>
-          <div className="mt-1 text-lg text-white">Clermont-l'Hérault</div>
-          <div className="text-sm text-white/60">34800, Languedoc — France</div>
-          <a
-            href="https://www.openstreetmap.org/?mlat=43.6258&mlon=3.4422#map=14/43.6258/3.4422"
-            target="_blank"
-            rel="noreferrer"
-            className="mt-3 inline-block text-xs text-flame-400 hover:underline"
-          >
-            Voir sur la carte →
-          </a>
+          <Mail className="mb-2 h-5 w-5 text-flame-400" />
+          <div className="text-xs uppercase tracking-[0.25em] text-white/40">Adresse mail</div>
+          <div className="mt-1 text-lg text-white">contact.mct2000@gmail.com</div>
+          <div className="text-sm text-white/60">
+            Pour toute question, inscription ou demande de partenariat.
+          </div>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-ink-900/60 p-5">
           <Mail className="mb-2 h-5 w-5 text-flame-400" />
-          <div className="text-xs uppercase tracking-[0.25em] text-white/40">Adresse mail</div>
-          <div className="mt-1 text-lg text-white">à venir</div>
+          <div className="text-xs uppercase tracking-[0.25em] text-white/40">Réseaux</div>
+          <div className="mt-1 text-lg text-white">Facebook · Instagram</div>
           <div className="text-sm text-white/60">
             En attendant, passez par le groupe Facebook ou la plateforme.
           </div>

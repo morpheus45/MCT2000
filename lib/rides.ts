@@ -1,4 +1,4 @@
-// Real motorcycle routes around Clermont-l'Hérault, Languedoc.
+// Real motorcycle routes in the South of France.
 // Coordinates are approximate centers of the route — used for the map markers.
 export type Ride = {
   id: string;
@@ -129,10 +129,10 @@ export const rides: Ride[] = [
   },
 ];
 
-// Center of the map = Clermont-l'Hérault
+// Center of the map = Languedoc region
 export const clubBase = {
   name: "Moto Club MCT 2000",
-  city: "Clermont-l'Hérault",
+  city: "Languedoc",
   lat: 43.6258,
   lon: 3.4422,
 };

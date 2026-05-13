@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
-import { ArrowRight, MapPin, Users } from "lucide-react";
+import { ArrowRight, Users } from "lucide-react";
 import Wheel from "./Wheel";
 
 export default function Hero() {
@@ -56,7 +56,7 @@ export default function Hero() {
           <span>·</span>
           <span>SCÈNE 26 / MCT 2000</span>
           <span>·</span>
-          <span>CLERMONT-L'HÉRAULT</span>
+          <span>SAISON 2026</span>
         </div>
       </motion.div>
 
@@ -99,13 +99,11 @@ export default function Hero() {
           className="mt-10 max-w-xl"
         >
           <p className="editorial text-xl leading-relaxed text-bone-50/85 md:text-2xl">
-            «&nbsp;131 motards. Clermont-l'Hérault.
+            «&nbsp;131 motards. Toutes cylindrées.
             <span className="not-italic font-display text-flame-400"> Une famille.</span>&nbsp;»
           </p>
           <div className="mt-3 flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest2 text-bone-50/40">
-            <MapPin className="h-3 w-3" /> 43.6258°N — 3.4422°E
-            <span>·</span>
-            <Users className="h-3 w-3" /> depuis 2000
+            <Users className="h-3 w-3" /> moto club · depuis l'an 2000
           </div>
         </motion.div>
 

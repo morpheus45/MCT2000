@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 
 const rows = [
-  { year: "2000", evt: "Genèse", note: "Quelques motards à Clermont-l'Hérault. Le club s'appelle MCT 2000." },
+  { year: "2000", evt: "Genèse", note: "Quelques passionnés posent les bases du club. Le nom : MCT 2000." },
   { year: "2013", evt: "Sur Facebook", note: "Le groupe officiel est créé le 10 février 2013. Premières balades partagées." },
   { year: "2018", evt: "Tradition Téléthon", note: "Le club lance sa balade caritative annuelle. La tradition est ancrée." },
   { year: "2022", evt: "Identité affirmée", note: "Le club consolide son nom : Moto Club MCT 2000." },

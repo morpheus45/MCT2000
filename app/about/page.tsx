@@ -1,4 +1,4 @@
-import { MapPin, Users, Calendar, Heart } from "lucide-react";
+import { Flame, Users, Calendar, Heart } from "lucide-react";
 
 export const metadata = { title: "L'histoire · Moto Club MCT 2000" };
 
@@ -7,11 +7,11 @@ export default function AboutPage() {
     <section className="mx-auto max-w-3xl px-5 py-16">
       <div className="chip mb-3">Histoire</div>
       <h1 className="heading text-6xl">
-        Clermont-l'Hérault, <span className="gradient-text">capitale du bitume.</span>
+        Le bitume, <span className="gradient-text">notre cathédrale.</span>
       </h1>
 
       <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Stat icon={MapPin} label="Base" value="Clermont-l'Hérault" />
+        <Stat icon={Flame} label="Fondation" value="An 2000" />
         <Stat icon={Users} label="Membres" value="131" />
         <Stat icon={Calendar} label="Groupe FB" value="2013" />
         <Stat icon={Heart} label="Cause" value="Téléthon" />
@@ -19,10 +19,9 @@ export default function AboutPage() {
 
       <div className="mt-10 space-y-6 text-lg leading-relaxed text-white/80">
         <p>
-          Le <strong className="text-white">Moto Club MCT 2000</strong> est basé à
-          <strong className="text-white"> Clermont-l'Hérault</strong>, au cœur du Languedoc.
-          Toutes cylindrées, toutes marques, toutes générations — ce qui nous rassemble, c'est la
-          passion du deux-roues et l'envie de rouler ensemble.
+          Le <strong className="text-white">Moto Club MCT 2000</strong> rassemble depuis l'an 2000
+          des passionnés de deux-roues. Toutes cylindrées, toutes marques, toutes générations — ce
+          qui nous rassemble, c'est la passion du deux-roues et l'envie de rouler ensemble.
         </p>
         <p>
           On organise des <strong className="text-white">balades moto lors du Téléthon</strong>,

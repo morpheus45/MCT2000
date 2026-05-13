@@ -34,7 +34,7 @@ export default function Navbar() {
               MCT <span className="editorial text-flame-400">2000</span>
             </div>
             <div className="mt-0.5 font-mono text-[9px] uppercase tracking-widest2 text-bone-50/40">
-              moto club · clermont-l'hérault
+              moto club · depuis 2000
             </div>
           </div>
         </Link>

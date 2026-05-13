@@ -17,11 +17,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://morpheus45.github.io" + basePath + "/"),
   title: {
-    default: "Moto Club MCT 2000 — Clermont-l'Hérault",
+    default: "Moto Club MCT 2000",
     template: "%s · Moto Club MCT 2000",
   },
   description:
-    "Le Moto Club MCT 2000 de Clermont-l'Hérault — 131 motards, balades Téléthon, sorties entre filles, toutes cylindrées.",
+    "Le Moto Club MCT 2000 — 131 motards, balades Téléthon, sorties entre filles, toutes cylindrées. Depuis l'an 2000.",
   applicationName: "Moto Club MCT 2000",
   manifest: `${basePath}/manifest.json`,
   icons: {
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     apple: [{ url: `${basePath}/icon-192.svg` }],
   },
   openGraph: {
-    title: "Moto Club MCT 2000 — Clermont-l'Hérault",
+    title: "Moto Club MCT 2000",
     description: "Fraternité. Bitume. Liberté. Depuis l'an 2000.",
     type: "website",
     locale: "fr_FR",

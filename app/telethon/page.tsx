@@ -27,7 +27,7 @@ export default function TelethonPage() {
         <ol className="space-y-4">
           {[
             "Inscription contre un don libre (minimum 10€) reversé intégralement à l'AFM-Téléthon.",
-            "Départ groupé depuis Clermont-l'Hérault, parcours de 100 km dans le Languedoc.",
+            "Départ groupé du point de RDV du club, parcours de 100 km dans le Languedoc.",
             "Pause repas conviviale, photos officielles, t-shirt commémoratif.",
             "Remise du chèque le soir-même au comité local du Téléthon.",
           ].map((step, i) => (

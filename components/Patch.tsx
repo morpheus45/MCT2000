@@ -1,7 +1,7 @@
 // Reusable circular club patch / sticker SVG.
 // Used as a decorative "badge" element across the magazine layout.
 export default function Patch({
-  text = "MCT 2000 · CLERMONT L'HÉRAULT · MOTO CLUB ·",
+  text = "MCT 2000 · MOTO CLUB · DEPUIS L'AN 2000 ·",
   size = 180,
   className = "",
   variant = "flame",
