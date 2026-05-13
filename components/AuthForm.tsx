@@ -81,12 +81,18 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
           supabase.auth.signInWithPassword({ email, password }),
         );
         if (error) throw error;
-        if (data.session) {
-          setMsg("Connecté ! Redirection…");
-          goTo("/feed/");
-        } else {
-          throw new Error("Connexion sans session — réessaie.");
+        if (!data.session) throw new Error("Connexion sans session — réessaie.");
+        setMsg("Connecté ! Redirection…");
+        // Ensure the session is persisted to localStorage before we hard-navigate.
+        // The supabase-js SDK writes asynchronously; without this wait, the next
+        // page sometimes loads before the storage is written and treats the user
+        // as anonymous.
+        for (let i = 0; i < 20; i++) {
+          const { data: check } = await supabase.auth.getSession();
+          if (check.session) break;
+          await new Promise((r) => setTimeout(r, 50));
         }
+        goTo("/feed/");
       }
     } catch (e: unknown) {
       setErr(e instanceof Error ? e.message : "Erreur inconnue");
