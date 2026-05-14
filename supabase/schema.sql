@@ -143,9 +143,12 @@ create table if not exists public.events (
   location text,
   distance_km integer,
   level text check (level in ('Facile','Intermédiaire','Confirmé','Tous niveaux')),
+  cover_image_url text,
   created_by uuid references public.profiles(id) on delete set null,
   created_at timestamptz default now()
 );
+-- Idempotent migration if the column was missing on existing DBs
+alter table public.events add column if not exists cover_image_url text;
 
 create table if not exists public.event_rsvps (
   event_id uuid not null references public.events(id) on delete cascade,
@@ -250,14 +253,16 @@ drop policy if exists rsvps_all on public.event_rsvps;
 create policy rsvps_all on public.event_rsvps for all
   using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
--- View: events with rsvp count + my status (SECURITY INVOKER: RLS applies)
-create or replace view public.events_with_counts
+-- View: events with rsvp count + my status + photo count (SECURITY INVOKER: RLS applies)
+drop view if exists public.events_with_counts;
+create view public.events_with_counts
 with (security_invoker = true) as
   select
     e.*,
     coalesce((select count(*) from public.event_rsvps r where r.event_id = e.id and r.status = 'going'), 0)::int as going_count,
     (select status from public.event_rsvps r
-       where r.event_id = e.id and r.user_id = auth.uid()) as my_status
+       where r.event_id = e.id and r.user_id = auth.uid()) as my_status,
+    (select count(*) from public.gallery_photos g where g.event_id = e.id)::int as photo_count
   from public.events e;
 
 -- ---------- Gallery ----------
@@ -267,8 +272,12 @@ create table if not exists public.gallery_photos (
   caption text,
   taken_at date,
   added_by uuid references public.profiles(id) on delete set null,
+  event_id uuid references public.events(id) on delete set null,
   created_at timestamptz default now()
 );
+-- Idempotent migration if the column was missing on existing DBs
+alter table public.gallery_photos add column if not exists event_id uuid references public.events(id) on delete set null;
+create index if not exists gallery_photos_event_idx on public.gallery_photos (event_id);
 
 alter table public.gallery_photos enable row level security;
 drop policy if exists gallery_select on public.gallery_photos;

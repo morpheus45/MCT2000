@@ -1,15 +1,23 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import Link from "next/link";
-import { Calendar, ImagePlus, Megaphone, Facebook, Loader2, Shield } from "lucide-react";
+import { Calendar, ImagePlus, Megaphone, Facebook, Loader2, Shield, ImageIcon, Trash2, ExternalLink } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { isDemo, demoMe } from "@/lib/demo";
-import { cn } from "@/lib/utils";
+import { cn, formatDateFr } from "@/lib/utils";
 
-type Tab = "events" | "post" | "gallery" | "import";
+type Tab = "events" | "event-photos" | "post" | "gallery" | "import";
 
 type Profile = { id: string; pseudo: string; role: string };
+
+type EventRow = {
+  id: string;
+  title: string;
+  starts_at: string;
+  location: string | null;
+  cover_image_url: string | null;
+};
 
 export default function AdminClient() {
   const supabase = useMemo(() => getSupabaseBrowser(), []);
@@ -75,13 +83,14 @@ where pseudo = '${me.pseudo}';`}</pre>
 
   const tabs: { id: Tab; label: string; icon: typeof Calendar }[] = [
     { id: "events", label: "Sorties", icon: Calendar },
+    { id: "event-photos", label: "Photos sorties", icon: ImageIcon },
     { id: "post", label: "Annonce", icon: Megaphone },
     { id: "gallery", label: "Galerie", icon: ImagePlus },
     { id: "import", label: "Import Facebook", icon: Facebook },
   ];
 
   return (
-    <section className="mx-auto max-w-4xl px-5 py-12">
+    <section className="mx-auto max-w-5xl px-5 py-12">
       <header className="mb-8 flex items-center gap-3">
         <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-flame-500 to-flame-700">
           <Shield className="h-6 w-6" />
@@ -117,6 +126,7 @@ where pseudo = '${me.pseudo}';`}</pre>
       </div>
 
       {tab === "events" && <CreateEvent />}
+      {tab === "event-photos" && <EventPhotos />}
       {tab === "post" && <CreatePost />}
       {tab === "gallery" && <AddGalleryPhoto />}
       {tab === "import" && <FacebookImport />}
@@ -130,11 +140,12 @@ function Section({ children }: { children: React.ReactNode }) {
   return <div className="rounded-2xl border border-white/10 bg-ink-900/60 p-6">{children}</div>;
 }
 
-function Label({ label, children }: { label: string; children: React.ReactNode }) {
+function Label({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) {
   return (
     <label className="block">
       <span className="mb-1 block text-xs uppercase tracking-[0.2em] text-white/50">{label}</span>
       {children}
+      {hint && <span className="mt-1 block text-[10px] text-white/40">{hint}</span>}
     </label>
   );
 }
@@ -151,6 +162,9 @@ function CreateEvent() {
   const [where, setWhere] = useState(isDemo ? "Café du marché — point de RDV club" : "");
   const [distance, setDistance] = useState<number | "">(isDemo ? 90 : "");
   const [level, setLevel] = useState("Facile");
+  const [coverUrl, setCoverUrl] = useState(
+    isDemo ? "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1400" : "",
+  );
   const [desc, setDesc] = useState(
     isDemo ? "Café à 8h45, briefing court, départ groupé à 9h. Petite boucle de 90 km, photo au cirque, retour vers 13h." : "",
   );
@@ -170,12 +184,13 @@ function CreateEvent() {
       location: where,
       distance_km: distance === "" ? null : distance,
       level,
+      cover_image_url: coverUrl || null,
     });
     setBusy(false);
     if (!error) {
       setOk(true);
-      setTitle(""); setDate(""); setWhere(""); setDistance(""); setDesc("");
-      setTimeout(() => setOk(false), 3000);
+      setTitle(""); setDate(""); setWhere(""); setDistance(""); setDesc(""); setCoverUrl("");
+      setTimeout(() => setOk(false), 4000);
     } else {
       alert(error.message);
     }
@@ -183,7 +198,10 @@ function CreateEvent() {
 
   return (
     <Section>
-      <h2 className="heading mb-4 text-2xl">Nouvelle sortie</h2>
+      <h2 className="heading mb-2 text-2xl">Nouvelle sortie</h2>
+      <p className="mb-4 text-sm text-white/60">
+        La sortie apparaîtra immédiatement dans <Link href="/events" className="text-flame-400 underline">/events</Link>.
+      </p>
       <form onSubmit={submit} className="space-y-4">
         <Label label="Titre">
           <input required value={title} onChange={(e) => setTitle(e.target.value)} className="input" placeholder="Sortie matinale Gorges du Verdon" />
@@ -212,6 +230,16 @@ function CreateEvent() {
             </select>
           </Label>
         </div>
+        <Label
+          label="Photo de couverture (URL)"
+          hint="Colle l'URL d'une photo représentative. Tu pourras ajouter d'autres photos après dans l'onglet « Photos sorties »."
+        >
+          <input type="url" value={coverUrl} onChange={(e) => setCoverUrl(e.target.value)} className="input" placeholder="https://images.unsplash.com/..." />
+        </Label>
+        {coverUrl && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={coverUrl} alt="" className="h-32 w-full rounded-lg border border-white/10 object-cover" />
+        )}
         <Label label="Description">
           <textarea value={desc} onChange={(e) => setDesc(e.target.value)} className="input min-h-[100px]" placeholder="Café au point de RDV à 8h45, briefing, départ 9h..." />
         </Label>
@@ -219,9 +247,238 @@ function CreateEvent() {
           <button disabled={busy || isDemo} className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed" title={isDemo ? "Désactivé en mode démo" : undefined}>
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : isDemo ? "🎬 Démo — Publier" : "Publier la sortie"}
           </button>
-          {ok && <span className="text-sm text-emerald-400">✓ Sortie créée</span>}
+          {ok && <span className="text-sm text-emerald-400">✓ Sortie créée — visible sur /events</span>}
         </div>
       </form>
+    </Section>
+  );
+}
+
+// ---------- Photos par sortie ----------
+
+type EventPhoto = {
+  id: string;
+  image_url: string;
+  caption: string | null;
+  taken_at: string | null;
+};
+
+function EventPhotos() {
+  const supabase = useMemo(() => getSupabaseBrowser(), []);
+  const [events, setEvents] = useState<EventRow[]>([]);
+  const [selectedEventId, setSelectedEventId] = useState<string>("");
+  const [photos, setPhotos] = useState<EventPhoto[]>([]);
+  const [loadingEvents, setLoadingEvents] = useState(true);
+  const [loadingPhotos, setLoadingPhotos] = useState(false);
+
+  // Form state for adding a photo to the selected event
+  const [imageUrl, setImageUrl] = useState("");
+  const [caption, setCaption] = useState("");
+  const [takenAt, setTakenAt] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [ok, setOk] = useState(false);
+
+  const selectedEvent = events.find((e) => e.id === selectedEventId) ?? null;
+
+  const refreshEvents = useCallback(async () => {
+    if (!supabase) return;
+    const { data } = await supabase
+      .from("events")
+      .select("id, title, starts_at, location, cover_image_url")
+      .order("starts_at", { ascending: true });
+    setEvents((data as EventRow[]) ?? []);
+    setLoadingEvents(false);
+  }, [supabase]);
+
+  const refreshPhotos = useCallback(async () => {
+    if (!supabase || !selectedEventId) {
+      setPhotos([]);
+      return;
+    }
+    setLoadingPhotos(true);
+    const { data } = await supabase
+      .from("gallery_photos")
+      .select("id, image_url, caption, taken_at")
+      .eq("event_id", selectedEventId)
+      .order("created_at", { ascending: false });
+    setPhotos((data as EventPhoto[]) ?? []);
+    setLoadingPhotos(false);
+  }, [supabase, selectedEventId]);
+
+  useEffect(() => {
+    if (isDemo) {
+      // Pre-fill with a couple of demo events
+      setEvents([
+        { id: "demo-ev1", title: "Balade dominicale — Mourèze", starts_at: new Date().toISOString(), location: "Mourèze", cover_image_url: null },
+        { id: "demo-ev2", title: "Téléthon — caritatif", starts_at: new Date().toISOString(), location: "100 km", cover_image_url: null },
+      ]);
+      setLoadingEvents(false);
+      return;
+    }
+    refreshEvents();
+  }, [refreshEvents]);
+
+  useEffect(() => {
+    if (isDemo) return;
+    refreshPhotos();
+  }, [refreshPhotos]);
+
+  async function addPhoto(e: React.FormEvent) {
+    e.preventDefault();
+    if (isDemo) {
+      alert("Mode démo — connecte Supabase pour ajouter une photo à une sortie.");
+      return;
+    }
+    if (!supabase || !selectedEventId) {
+      alert("Sélectionne d'abord une sortie ci-dessus.");
+      return;
+    }
+    const { data: u } = await supabase.auth.getUser();
+    if (!u.user) return;
+    setBusy(true);
+    const { error } = await supabase.from("gallery_photos").insert({
+      event_id: selectedEventId,
+      image_url: imageUrl,
+      caption: caption || null,
+      taken_at: takenAt || null,
+      added_by: u.user.id,
+    });
+    setBusy(false);
+    if (!error) {
+      setImageUrl(""); setCaption(""); setTakenAt("");
+      setOk(true);
+      setTimeout(() => setOk(false), 3000);
+      await refreshPhotos();
+    } else {
+      alert(error.message);
+    }
+  }
+
+  async function deletePhoto(photoId: string) {
+    if (!supabase) return;
+    if (!confirm("Supprimer cette photo ?")) return;
+    const { error } = await supabase.from("gallery_photos").delete().eq("id", photoId);
+    if (error) {
+      alert(error.message);
+      return;
+    }
+    await refreshPhotos();
+  }
+
+  return (
+    <Section>
+      <h2 className="heading mb-2 text-2xl">Photos par sortie</h2>
+      <p className="mb-5 text-sm text-white/60">
+        Ajoute des photos à une sortie spécifique. Elles apparaîtront sur sa fiche dans{" "}
+        <Link href="/events" className="text-flame-400 underline">/events</Link>{" "}
+        et dans la <Link href="/gallery" className="text-flame-400 underline">galerie</Link>.
+      </p>
+
+      {/* Event picker */}
+      <Label label="Sortie à enrichir">
+        {loadingEvents ? (
+          <div className="flex items-center gap-2 text-sm text-white/40"><Loader2 className="h-4 w-4 animate-spin" /> Chargement…</div>
+        ) : events.length === 0 ? (
+          <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-sm text-amber-200">
+            Aucune sortie en base. Commence par en créer une dans l'onglet <strong>Sorties</strong>.
+          </div>
+        ) : (
+          <select
+            value={selectedEventId}
+            onChange={(e) => setSelectedEventId(e.target.value)}
+            className="input"
+          >
+            <option value="">— Choisir une sortie —</option>
+            {events.map((ev) => (
+              <option key={ev.id} value={ev.id}>
+                {formatDateFr(ev.starts_at)} · {ev.title}
+              </option>
+            ))}
+          </select>
+        )}
+      </Label>
+
+      {selectedEvent && (
+        <>
+          {/* Cover preview */}
+          {selectedEvent.cover_image_url && (
+            <div className="mt-4">
+              <div className="mb-1 text-[10px] uppercase tracking-widest2 text-white/40">Couverture actuelle</div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={selectedEvent.cover_image_url}
+                alt=""
+                className="h-32 w-full rounded-lg border border-white/10 object-cover"
+              />
+            </div>
+          )}
+
+          {/* Add photo form */}
+          <form onSubmit={addPhoto} className="mt-6 space-y-4 border-t border-white/10 pt-6">
+            <h3 className="heading text-lg">Ajouter une photo à : <span className="text-flame-400">{selectedEvent.title}</span></h3>
+            <Label label="URL de la photo" hint="Héberge sur imgur.com / Cloudinary / Supabase Storage et colle le lien direct.">
+              <input required type="url" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="input" placeholder="https://i.imgur.com/..." />
+            </Label>
+            {imageUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={imageUrl} alt="" className="h-32 w-full rounded-lg border border-white/10 object-cover" />
+            )}
+            <Label label="Légende — optionnel">
+              <input value={caption} onChange={(e) => setCaption(e.target.value)} className="input" placeholder="Point de RDV au café du marché, 8h30" />
+            </Label>
+            <Label label="Date de la photo — optionnel">
+              <input type="date" value={takenAt} onChange={(e) => setTakenAt(e.target.value)} className="input" />
+            </Label>
+            <div className="flex items-center gap-3">
+              <button disabled={busy || isDemo} className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
+                {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : isDemo ? "🎬 Démo — Ajouter" : "Ajouter à cette sortie"}
+              </button>
+              {ok && <span className="text-sm text-emerald-400">✓ Photo ajoutée</span>}
+            </div>
+          </form>
+
+          {/* Existing photos for this event */}
+          <div className="mt-8 border-t border-white/10 pt-6">
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="heading text-lg">Photos déjà liées ({photos.length})</h3>
+              {selectedEventId && (
+                <Link
+                  href="/events"
+                  className="inline-flex items-center gap-1 text-xs text-flame-400 hover:underline"
+                >
+                  Voir la sortie publiée <ExternalLink className="h-3 w-3" />
+                </Link>
+              )}
+            </div>
+            {loadingPhotos ? (
+              <div className="flex items-center gap-2 text-sm text-white/40"><Loader2 className="h-4 w-4 animate-spin" /> Chargement…</div>
+            ) : photos.length === 0 ? (
+              <p className="text-sm text-white/40">Aucune photo encore. Ajoute-en une ci-dessus.</p>
+            ) : (
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {photos.map((p) => (
+                  <div key={p.id} className="group relative overflow-hidden rounded-lg border border-white/10">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={p.image_url} alt={p.caption ?? ""} className="aspect-square w-full object-cover" />
+                    {p.caption && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-ink-950 to-transparent p-2 text-[10px] text-white">
+                        {p.caption}
+                      </div>
+                    )}
+                    <button
+                      onClick={() => deletePhoto(p.id)}
+                      aria-label="Supprimer"
+                      className="absolute right-1 top-1 grid h-7 w-7 place-items-center rounded-full bg-ink-950/80 text-red-400 opacity-0 transition-opacity hover:bg-red-500/30 hover:text-white group-hover:opacity-100"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </>
+      )}
     </Section>
   );
 }
@@ -322,11 +579,14 @@ function AddGalleryPhoto() {
 
   return (
     <Section>
-      <h2 className="heading mb-4 text-2xl">Ajouter une photo</h2>
+      <h2 className="heading mb-4 text-2xl">Ajouter une photo libre (sans sortie)</h2>
       <p className="mb-4 text-sm text-white/60">
-        Colle une URL d'image publique (héberge sur{" "}
+        Pour une photo générale du club (pas liée à une sortie précise). Pour lier une photo à une
+        sortie, utilise l'onglet <strong>Photos sorties</strong>.
+        <br />
+        Héberge tes photos sur{" "}
         <a className="text-flame-400 underline" href="https://imgur.com" target="_blank" rel="noreferrer">imgur.com</a>{" "}
-        si besoin) ou utilise une URL Supabase Storage.
+        si besoin.
       </p>
       <form onSubmit={submit} className="space-y-4">
         <Label label="URL de l'image">
@@ -417,10 +677,6 @@ function FacebookImport() {
           {ok && <span className="text-sm text-emerald-400">✓ Post importé</span>}
         </div>
       </form>
-      <p className="mt-4 text-xs text-white/40">
-        Astuce avancée : Facebook permet d'exporter <em>toutes</em> tes données du club via Paramètres → Vos infos
-        → Télécharger une copie. On peut ensuite scripter l'import du ZIP.
-      </p>
     </Section>
   );
 }

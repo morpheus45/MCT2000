@@ -172,7 +172,9 @@ export type DemoEvent = {
   location: string | null;
   distance_km: number | null;
   level: string;
+  cover_image_url: string | null;
   going_count: number;
+  photo_count?: number;
   my_status: string | null;
 };
 
@@ -185,6 +187,7 @@ export const demoEvents: DemoEvent[] = [
     location: "Lac du Salagou — boucle",
     distance_km: 60,
     level: "Facile",
+    cover_image_url: "https://images.unsplash.com/photo-1572452571879-3d67d5b2a39f?q=80&w=1400&auto=format&fit=crop",
     going_count: 12,
     my_status: null,
   },
@@ -196,6 +199,7 @@ export const demoEvents: DemoEvent[] = [
     location: "Départ place de la Mairie",
     distance_km: 90,
     level: "Facile",
+    cover_image_url: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1400&auto=format&fit=crop",
     going_count: 18,
     my_status: "going",
   },
@@ -207,6 +211,7 @@ export const demoEvents: DemoEvent[] = [
     location: "Garage de Tonio, Béziers",
     distance_km: null,
     level: "Tous niveaux",
+    cover_image_url: "https://images.unsplash.com/photo-1611241893603-3c359704e0ee?q=80&w=1400&auto=format&fit=crop",
     going_count: 8,
     my_status: null,
   },
@@ -218,6 +223,7 @@ export const demoEvents: DemoEvent[] = [
     location: "Route → Meyrueis (Cévennes)",
     distance_km: 350,
     level: "Confirmé",
+    cover_image_url: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1400&auto=format&fit=crop",
     going_count: 14,
     my_status: null,
   },
@@ -229,6 +235,7 @@ export const demoEvents: DemoEvent[] = [
     location: "Boucle caritative — 100 km",
     distance_km: 100,
     level: "Facile",
+    cover_image_url: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?q=80&w=1400&auto=format&fit=crop",
     going_count: 42,
     my_status: "going",
   },

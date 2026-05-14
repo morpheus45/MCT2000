@@ -16,17 +16,19 @@ type EventRow = {
   location: string | null;
   distance_km: number | null;
   level: string | null;
+  cover_image_url: string | null;
   going_count: number;
+  photo_count?: number;
   my_status: string | null;
 };
 
 // Fallback / seed events for first-run / static export without DB
 const seed: EventRow[] = [
-  { id: "e1", title: "Sortie matinale — Gorges du Verdon", starts_at: "2026-05-18T09:00:00Z", location: "Castellane → Moustiers-Sainte-Marie", distance_km: 180, level: "Facile", going_count: 14, my_status: null, description: null },
-  { id: "e2", title: "Atelier mécanique — chaîne & pignons", starts_at: "2026-05-25T14:00:00Z", location: "Atelier Marc, Lyon 7e", distance_km: null, level: "Tous niveaux", going_count: 8, my_status: null, description: null },
-  { id: "e3", title: "Road-trip — Col de la Bonette", starts_at: "2026-06-01T08:00:00Z", location: "Saint-Étienne-de-Tinée → Jausiers", distance_km: 260, level: "Intermédiaire", going_count: 22, my_status: null, description: null },
-  { id: "e4", title: "Sortie de nuit — pleine lune", starts_at: "2026-06-14T22:00:00Z", location: "Départ Vieux-Lyon", distance_km: 120, level: "Confirmé", going_count: 11, my_status: null, description: null },
-  { id: "e5", title: "Week-end Pyrénées", starts_at: "2026-07-04T08:00:00Z", location: "Tarbes → Andorre", distance_km: 650, level: "Confirmé", going_count: 18, my_status: null, description: null },
+  { id: "e1", title: "Sortie matinale — Gorges du Verdon", starts_at: "2026-05-18T09:00:00Z", location: "Castellane → Moustiers-Sainte-Marie", distance_km: 180, level: "Facile", cover_image_url: null, going_count: 14, my_status: null, description: null },
+  { id: "e2", title: "Atelier mécanique — chaîne & pignons", starts_at: "2026-05-25T14:00:00Z", location: "Atelier Marc, Lyon 7e", distance_km: null, level: "Tous niveaux", cover_image_url: null, going_count: 8, my_status: null, description: null },
+  { id: "e3", title: "Road-trip — Col de la Bonette", starts_at: "2026-06-01T08:00:00Z", location: "Saint-Étienne-de-Tinée → Jausiers", distance_km: 260, level: "Intermédiaire", cover_image_url: null, going_count: 22, my_status: null, description: null },
+  { id: "e4", title: "Sortie de nuit — pleine lune", starts_at: "2026-06-14T22:00:00Z", location: "Départ Vieux-Lyon", distance_km: 120, level: "Confirmé", cover_image_url: null, going_count: 11, my_status: null, description: null },
+  { id: "e5", title: "Week-end Pyrénées", starts_at: "2026-07-04T08:00:00Z", location: "Tarbes → Andorre", distance_km: 650, level: "Confirmé", cover_image_url: null, going_count: 18, my_status: null, description: null },
 ];
 
 export default function EventsClient() {
@@ -109,18 +111,34 @@ export default function EventsClient() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.04 }}
-              className="grid items-center gap-6 rounded-2xl border border-white/10 bg-ink-900/60 p-5 transition-all hover:border-flame-500/40 md:grid-cols-[100px_1fr_auto]"
+              className="grid items-stretch gap-0 overflow-hidden rounded-2xl border border-white/10 bg-ink-900/60 transition-all hover:border-flame-500/40 md:grid-cols-[200px_1fr_auto]"
             >
-              <div className="text-center">
-                <div className="heading text-5xl gradient-text">{d.getDate()}</div>
-                <div className="text-xs uppercase tracking-[0.25em] text-white/50">
-                  {d.toLocaleDateString("fr-FR", { month: "short" })}
+              {/* Cover image OR date block */}
+              {e.cover_image_url ? (
+                <div className="relative h-40 md:h-auto">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={e.cover_image_url} alt={e.title} className="h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink-950/90 via-ink-950/30 to-transparent" />
+                  <div className="absolute bottom-2 left-3 right-3 text-center">
+                    <div className="heading text-4xl gradient-text leading-none">{d.getDate()}</div>
+                    <div className="text-[10px] uppercase tracking-[0.25em] text-white/70">
+                      {d.toLocaleDateString("fr-FR", { month: "short" })} ·{" "}
+                      {d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
+                    </div>
+                  </div>
                 </div>
-                <div className="text-[10px] text-white/30">
-                  {d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
+              ) : (
+                <div className="flex flex-col items-center justify-center bg-midnight-800 p-6 text-center md:py-10">
+                  <div className="heading text-5xl gradient-text">{d.getDate()}</div>
+                  <div className="text-xs uppercase tracking-[0.25em] text-white/50">
+                    {d.toLocaleDateString("fr-FR", { month: "short" })}
+                  </div>
+                  <div className="text-[10px] text-white/30">
+                    {d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
+                  </div>
                 </div>
-              </div>
-              <div>
+              )}
+              <div className="p-5">
                 <h3 className="heading text-2xl tracking-wide">{e.title}</h3>
                 {e.description && (
                   <p className="mt-1 text-sm text-white/60">{e.description}</p>
@@ -137,9 +155,14 @@ export default function EventsClient() {
                     </span>
                   )}
                   {e.level && <span className="chip">{e.level}</span>}
+                  {(e.photo_count ?? 0) > 0 && (
+                    <span className="chip border-flame-500/40 text-flame-300">
+                      📸 {e.photo_count} photo{(e.photo_count ?? 0) > 1 ? "s" : ""}
+                    </span>
+                  )}
                 </div>
               </div>
-              <div className="flex flex-col items-end gap-2">
+              <div className="flex flex-col items-end justify-center gap-2 p-5">
                 <div className="flex items-center gap-1.5 text-sm text-white/60">
                   <Users className="h-3.5 w-3.5" /> {e.going_count} inscrits
                 </div>
