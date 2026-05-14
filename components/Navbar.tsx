@@ -10,6 +10,7 @@ const links = [
   { href: "/feed", label: "Feed" },
   { href: "/chat", label: "Chat" },
   { href: "/events", label: "Sorties" },
+  { href: "/sorties-passees", label: "Archives" },
   { href: "/rides", label: "Routes" },
   { href: "/gallery", label: "Galerie" },
   { href: "/telethon", label: "Téléthon" },

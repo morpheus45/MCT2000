@@ -2,12 +2,12 @@
 
 import { useEffect, useMemo, useState, useCallback } from "react";
 import Link from "next/link";
-import { Calendar, ImagePlus, Megaphone, Facebook, Loader2, Shield, ImageIcon, Trash2, ExternalLink } from "lucide-react";
+import { Calendar, ImagePlus, Megaphone, Facebook, Loader2, Shield, ImageIcon, Trash2, ExternalLink, ClipboardCheck, CheckCircle, X as XIcon } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
-import { isDemo, demoMe } from "@/lib/demo";
+import { isDemo, demoMe, demoPendingSubmissions } from "@/lib/demo";
 import { cn, formatDateFr } from "@/lib/utils";
 
-type Tab = "events" | "event-photos" | "post" | "gallery" | "import";
+type Tab = "events" | "event-photos" | "post" | "gallery" | "import" | "validations";
 
 type Profile = { id: string; pseudo: string; role: string };
 
@@ -87,6 +87,7 @@ where pseudo = '${me.pseudo}';`}</pre>
     { id: "post", label: "Annonce", icon: Megaphone },
     { id: "gallery", label: "Galerie", icon: ImagePlus },
     { id: "import", label: "Import Facebook", icon: Facebook },
+    { id: "validations", label: "Validations", icon: ClipboardCheck },
   ];
 
   return (
@@ -130,6 +131,7 @@ where pseudo = '${me.pseudo}';`}</pre>
       {tab === "post" && <CreatePost />}
       {tab === "gallery" && <AddGalleryPhoto />}
       {tab === "import" && <FacebookImport />}
+      {tab === "validations" && <ValidateSubmissions />}
     </section>
   );
 }
@@ -677,6 +679,226 @@ function FacebookImport() {
           {ok && <span className="text-sm text-emerald-400">✓ Post importé</span>}
         </div>
       </form>
+    </Section>
+  );
+}
+
+// ---------- Validations (member-submitted past outings) ----------
+
+type SubmissionRow = {
+  id: string;
+  title: string;
+  description: string | null;
+  ride_date: string;
+  location: string | null;
+  distance_km: number | null;
+  cover_image_url: string | null;
+  status: "pending" | "approved" | "rejected";
+  admin_note: string | null;
+  created_at: string;
+  pseudo?: string;
+};
+
+function ValidateSubmissions() {
+  const supabase = useMemo(() => getSupabaseBrowser(), []);
+  const [subs, setSubs] = useState<SubmissionRow[]>(
+    isDemo ? (demoPendingSubmissions as SubmissionRow[]) : [],
+  );
+  const [loading, setLoading] = useState(!isDemo);
+  const [notes, setNotes] = useState<Record<string, string>>({});
+  const [busy, setBusy] = useState<string | null>(null);
+  const [filter, setFilter] = useState<"all" | "pending" | "approved" | "rejected">("pending");
+
+  const refresh = useCallback(async () => {
+    if (!supabase || isDemo) return;
+    setLoading(true);
+    const { data } = await supabase
+      .from("ride_submissions_with_pseudo")
+      .select("*")
+      .order("created_at", { ascending: false });
+    setSubs((data ?? []) as SubmissionRow[]);
+    setLoading(false);
+  }, [supabase]);
+
+  useEffect(() => {
+    if (isDemo) { setLoading(false); return; }
+    refresh();
+  }, [refresh]);
+
+  async function decide(id: string, newStatus: "approved" | "rejected") {
+    if (isDemo) {
+      alert("Mode démo — connecte Supabase pour valider des propositions.");
+      return;
+    }
+    if (!supabase) return;
+    setBusy(id);
+    const { data: u } = await supabase.auth.getUser();
+    const { error } = await supabase
+      .from("ride_submissions")
+      .update({
+        status: newStatus,
+        admin_note: notes[id] || null,
+        reviewed_by: u.user?.id ?? null,
+        reviewed_at: new Date().toISOString(),
+      })
+      .eq("id", id);
+    setBusy(null);
+    if (error) {
+      alert(error.message);
+    } else {
+      await refresh();
+    }
+  }
+
+  const filtered = filter === "all" ? subs : subs.filter((s) => s.status === filter);
+  const pendingCount = subs.filter((s) => s.status === "pending").length;
+
+  return (
+    <Section>
+      <h2 className="heading mb-1 text-2xl">Validations — Sorties passées</h2>
+      <p className="mb-5 text-sm text-white/60">
+        Les membres peuvent proposer leurs propres souvenirs de sorties. Approuve ou refuse ici.{" "}
+        <Link href="/sorties-passees" className="text-flame-400 underline">
+          Voir la page publique
+        </Link>
+      </p>
+
+      {/* Filters */}
+      <div className="mb-5 flex flex-wrap gap-2">
+        {(["pending", "all", "approved", "rejected"] as const).map((f) => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={cn(
+              "rounded-full px-3 py-1 text-xs font-medium transition-colors",
+              filter === f
+                ? "bg-flame-500/20 text-flame-200 border border-flame-500/40"
+                : "text-white/50 hover:text-white",
+            )}
+          >
+            {f === "pending"
+              ? `En attente${pendingCount > 0 ? ` (${pendingCount})` : ""}`
+              : f === "all"
+                ? "Toutes"
+                : f === "approved"
+                  ? "Approuvées"
+                  : "Refusées"}
+          </button>
+        ))}
+      </div>
+
+      {loading ? (
+        <div className="flex items-center gap-2 text-sm text-white/40">
+          <Loader2 className="h-4 w-4 animate-spin" /> Chargement…
+        </div>
+      ) : filtered.length === 0 ? (
+        <p className="py-8 text-center text-sm text-white/40">
+          {filter === "pending"
+            ? "Aucune proposition en attente."
+            : "Aucune proposition dans cette catégorie."}
+        </p>
+      ) : (
+        <div className="space-y-4">
+          {filtered.map((s) => (
+            <div
+              key={s.id}
+              className={cn(
+                "rounded-xl border p-4",
+                s.status === "approved"
+                  ? "border-emerald-500/30 bg-emerald-500/5"
+                  : s.status === "rejected"
+                    ? "border-red-500/30 bg-red-500/5"
+                    : "border-white/10 bg-ink-900/40",
+              )}
+            >
+              {/* Header */}
+              <div className="flex flex-wrap items-start justify-between gap-2">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={cn(
+                        "rounded-full px-2 py-0.5 text-[10px] uppercase tracking-wider",
+                        s.status === "approved"
+                          ? "bg-emerald-500/20 text-emerald-300"
+                          : s.status === "rejected"
+                            ? "bg-red-500/20 text-red-300"
+                            : "bg-amber-500/20 text-amber-300",
+                      )}
+                    >
+                      {s.status === "approved"
+                        ? "Approuvée"
+                        : s.status === "rejected"
+                          ? "Refusée"
+                          : "En attente"}
+                    </span>
+                    {s.pseudo && (
+                      <span className="font-mono text-[10px] text-white/40">par {s.pseudo}</span>
+                    )}
+                  </div>
+                  <h3 className="heading mt-1 text-lg">{s.title}</h3>
+                  <div className="mt-1 flex flex-wrap gap-3 text-xs text-white/50">
+                    <span>{s.ride_date}</span>
+                    {s.location && <span>· {s.location}</span>}
+                    {s.distance_km && <span>· {s.distance_km} km</span>}
+                  </div>
+                </div>
+                {s.cover_image_url && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={s.cover_image_url}
+                    alt=""
+                    className="h-16 w-24 rounded-lg border border-white/10 object-cover"
+                  />
+                )}
+              </div>
+
+              {/* Description */}
+              {s.description && (
+                <p className="mt-2 text-sm text-white/60">{s.description}</p>
+              )}
+
+              {/* Actions — only for pending */}
+              {s.status === "pending" && (
+                <div className="mt-4 border-t border-white/10 pt-4">
+                  <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/40">
+                    Note admin (optionnel)
+                  </label>
+                  <input
+                    value={notes[s.id] ?? ""}
+                    onChange={(e) =>
+                      setNotes((prev) => ({ ...prev, [s.id]: e.target.value }))
+                    }
+                    className="input mb-3 text-sm"
+                    placeholder="Message à afficher au membre…"
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => decide(s.id, "approved")}
+                      disabled={busy === s.id || isDemo}
+                      className="flex items-center gap-2 rounded-full bg-emerald-500/20 border border-emerald-500/40 px-4 py-1.5 text-sm font-medium text-emerald-300 transition-colors hover:bg-emerald-500/30 disabled:opacity-50"
+                    >
+                      {busy === s.id ? (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      ) : (
+                        <CheckCircle className="h-3.5 w-3.5" />
+                      )}
+                      {isDemo ? "🎬 Approuver" : "Approuver"}
+                    </button>
+                    <button
+                      onClick={() => decide(s.id, "rejected")}
+                      disabled={busy === s.id || isDemo}
+                      className="flex items-center gap-2 rounded-full bg-red-500/10 border border-red-500/30 px-4 py-1.5 text-sm font-medium text-red-300 transition-colors hover:bg-red-500/20 disabled:opacity-50"
+                    >
+                      <XIcon className="h-3.5 w-3.5" />
+                      {isDemo ? "🎬 Refuser" : "Refuser"}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </Section>
   );
 }

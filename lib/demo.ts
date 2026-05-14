@@ -178,6 +178,242 @@ export type DemoEvent = {
   my_status: string | null;
 };
 
+// ---------- Past outings (Sorties passées) ----------
+
+export type DemoPastOuting = {
+  id: string;
+  title: string;
+  date: string; // ISO date YYYY-MM-DD
+  year: number;
+  location: string | null;
+  distance_km: number | null;
+  cover_image_url: string | null;
+  photo_count: number;
+  going_count: number;
+  description: string | null;
+  source: "event" | "submission";
+  pseudo?: string;
+  level?: string | null;
+};
+
+export const demoPastOutings: DemoPastOuting[] = [
+  // ── 2026 ──
+  {
+    id: "past-1",
+    title: "Balade printanière — Gorges de l'Hérault",
+    date: "2026-04-20",
+    year: 2026,
+    location: "Saint-Guilhem-le-Désert",
+    distance_km: 110,
+    cover_image_url: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1200&auto=format&fit=crop",
+    photo_count: 14,
+    going_count: 16,
+    description: "Grande balade de printemps sur les gorges, café en terrasse et retour par Aniane.",
+    source: "event",
+    level: "Facile",
+  },
+  {
+    id: "past-2",
+    title: "Route des Cistes — Pic Saint-Loup",
+    date: "2026-03-15",
+    year: 2026,
+    location: "Ganges → Saint-Martin-de-Londres",
+    distance_km: 80,
+    cover_image_url: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1200&auto=format&fit=crop",
+    photo_count: 7,
+    going_count: 11,
+    description: null,
+    source: "event",
+    level: "Facile",
+  },
+  {
+    id: "past-3",
+    title: "Première sortie 2026 — Lac du Salagou",
+    date: "2026-01-26",
+    year: 2026,
+    location: "Lac du Salagou — boucle",
+    distance_km: 60,
+    cover_image_url: "https://images.unsplash.com/photo-1572452571879-3d67d5b2a39f?q=80&w=1200&auto=format&fit=crop",
+    photo_count: 22,
+    going_count: 20,
+    description: "Tradition : la première sortie de l'année au Salagou. 20 motos au départ.",
+    source: "submission",
+    pseudo: "Sophie",
+    level: null,
+  },
+  // ── 2025 ──
+  {
+    id: "past-4",
+    title: "🎗 Téléthon 2025 — Balade caritative",
+    date: "2025-12-06",
+    year: 2025,
+    location: "Boucle caritative — 100 km",
+    distance_km: 100,
+    cover_image_url: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?q=80&w=1200&auto=format&fit=crop",
+    photo_count: 38,
+    going_count: 47,
+    description: "47 motards pour la bonne cause. Record du club.",
+    source: "event",
+    level: "Facile",
+  },
+  {
+    id: "past-5",
+    title: "Road-trip d'été — Gorges du Verdon",
+    date: "2025-07-12",
+    year: 2025,
+    location: "Castellane → Moustiers-Sainte-Marie",
+    distance_km: 200,
+    cover_image_url: "https://images.unsplash.com/photo-1591216105468-f02e4c93cc05?q=80&w=1200&auto=format&fit=crop",
+    photo_count: 52,
+    going_count: 15,
+    description: "Deux jours de route, un bivouac au bord de l'eau. Inoubliable.",
+    source: "event",
+    level: "Confirmé",
+  },
+  {
+    id: "past-6",
+    title: "Week-end Pyrénées — Andorre",
+    date: "2025-06-20",
+    year: 2025,
+    location: "Foix → Andorre-la-Vieille",
+    distance_km: 380,
+    cover_image_url: null,
+    photo_count: 29,
+    going_count: 12,
+    description: null,
+    source: "submission",
+    pseudo: "Marco",
+    level: null,
+  },
+  {
+    id: "past-7",
+    title: "Sortie Cévennes — Mont Aigoual",
+    date: "2025-04-05",
+    year: 2025,
+    location: "Route → Meyrueis → Aigoual",
+    distance_km: 310,
+    cover_image_url: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1200&auto=format&fit=crop",
+    photo_count: 18,
+    going_count: 14,
+    description: "Mont Aigoual depuis Ganges — une classique.",
+    source: "event",
+    level: "Intermédiaire",
+  },
+  // ── 2024 ──
+  {
+    id: "past-8",
+    title: "🎗 Téléthon 2024",
+    date: "2024-12-07",
+    year: 2024,
+    location: "Boucle caritative — 100 km",
+    distance_km: 100,
+    cover_image_url: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?q=80&w=1200&auto=format&fit=crop",
+    photo_count: 41,
+    going_count: 39,
+    description: null,
+    source: "event",
+    level: "Facile",
+  },
+  {
+    id: "past-9",
+    title: "Grande Traversée de l'Hérault",
+    date: "2024-08-18",
+    year: 2024,
+    location: "Montpellier → Saint-Pons-de-Thomières",
+    distance_km: 150,
+    cover_image_url: "https://images.unsplash.com/photo-1572452571879-3d67d5b2a39f?q=80&w=1200&auto=format&fit=crop",
+    photo_count: 33,
+    going_count: 18,
+    description: null,
+    source: "submission",
+    pseudo: "Karim",
+    level: null,
+  },
+  {
+    id: "past-10",
+    title: "Printemps mécanique + balade",
+    date: "2024-03-24",
+    year: 2024,
+    location: "Garage Tonio + Route du Salagou",
+    distance_km: 55,
+    cover_image_url: "https://images.unsplash.com/photo-1611241893603-3c359704e0ee?q=80&w=1200&auto=format&fit=crop",
+    photo_count: 8,
+    going_count: 10,
+    description: "Atelier chaîne et freins le matin, balade légère l'après-midi.",
+    source: "event",
+    level: "Tous niveaux",
+  },
+  // ── 2023 ──
+  {
+    id: "past-11",
+    title: "🎗 Téléthon 2023",
+    date: "2023-12-02",
+    year: 2023,
+    location: "Boucle caritative — 100 km",
+    distance_km: 100,
+    cover_image_url: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?q=80&w=1200&auto=format&fit=crop",
+    photo_count: 36,
+    going_count: 35,
+    description: null,
+    source: "event",
+    level: "Facile",
+  },
+  {
+    id: "past-12",
+    title: "Road-trip Espagne — Costa Brava",
+    date: "2023-09-08",
+    year: 2023,
+    location: "Gérone → Barcelone → retour",
+    distance_km: 620,
+    cover_image_url: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1200&auto=format&fit=crop",
+    photo_count: 61,
+    going_count: 8,
+    description: "3 jours en Espagne. La meilleure sortie de l'année selon le vote du club.",
+    source: "event",
+    level: "Confirmé",
+  },
+];
+
+export type DemoRideSubmission = {
+  id: string;
+  title: string;
+  description: string | null;
+  ride_date: string;
+  location: string | null;
+  distance_km: number | null;
+  cover_image_url: string | null;
+  status: "pending" | "approved" | "rejected";
+  created_at: string;
+  pseudo?: string;
+};
+
+export const demoPendingSubmissions: DemoRideSubmission[] = [
+  {
+    id: "sub-pending-1",
+    title: "Virée nocturne — bords de Thau",
+    description: "Sortie improvisée à la pleine lune, étang de Thau au clair de lune. Mémorable.",
+    ride_date: "2026-04-10",
+    location: "Sète → Marseillan",
+    distance_km: 45,
+    cover_image_url: null,
+    status: "pending",
+    created_at: new Date(Date.now() - 86_400_000 * 2).toISOString(),
+    pseudo: "Patou",
+  },
+  {
+    id: "sub-pending-2",
+    title: "Retour de Barcelone solo",
+    description: "Parti seul, rentré avec des souvenirs plein le casque et 800 km dans les pattes.",
+    ride_date: "2026-02-14",
+    location: "Barcelone → Montpellier",
+    distance_km: 310,
+    cover_image_url: "https://images.unsplash.com/photo-1591216105468-f02e4c93cc05?q=80&w=1200&auto=format&fit=crop",
+    status: "pending",
+    created_at: new Date(Date.now() - 86_400_000 * 5).toISOString(),
+    pseudo: "Lina",
+  },
+];
+
 export const demoEvents: DemoEvent[] = [
   {
     id: "ev1",
