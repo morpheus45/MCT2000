@@ -170,6 +170,10 @@ function CreateEvent() {
   const [desc, setDesc] = useState(
     isDemo ? "Café à 8h45, briefing court, départ groupé à 9h. Petite boucle de 90 km, photo au cirque, retour vers 13h." : "",
   );
+  const [waypointsRaw, setWaypointsRaw] = useState(
+    isDemo ? "[[43.6271,3.4403],[43.6244,3.3675],[43.6040,3.4110],[43.6271,3.4403]]" : "",
+  );
+  const [waypointsError, setWaypointsError] = useState<string | null>(null);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -178,6 +182,23 @@ function CreateEvent() {
       return;
     }
     if (!supabase) return;
+
+    // Parse waypoints if provided
+    let waypointsParsed: [number, number][] | null = null;
+    if (waypointsRaw.trim()) {
+      try {
+        const parsed = JSON.parse(waypointsRaw.trim());
+        if (!Array.isArray(parsed) || !parsed.every((p) => Array.isArray(p) && p.length >= 2)) {
+          throw new Error("Format invalide");
+        }
+        waypointsParsed = parsed as [number, number][];
+        setWaypointsError(null);
+      } catch {
+        setWaypointsError("Format JSON invalide — exemple : [[43.627,3.440],[43.650,3.360]]");
+        return;
+      }
+    }
+
     setBusy(true);
     const { error } = await supabase.from("events").insert({
       title,
@@ -187,11 +208,12 @@ function CreateEvent() {
       distance_km: distance === "" ? null : distance,
       level,
       cover_image_url: coverUrl || null,
+      waypoints: waypointsParsed,
     });
     setBusy(false);
     if (!error) {
       setOk(true);
-      setTitle(""); setDate(""); setWhere(""); setDistance(""); setDesc(""); setCoverUrl("");
+      setTitle(""); setDate(""); setWhere(""); setDistance(""); setDesc(""); setCoverUrl(""); setWaypointsRaw("");
       setTimeout(() => setOk(false), 4000);
     } else {
       alert(error.message);
@@ -242,6 +264,20 @@ function CreateEvent() {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={coverUrl} alt="" className="h-32 w-full rounded-lg border border-white/10 object-cover" />
         )}
+        <Label
+          label="Itinéraire — points de passage (JSON)"
+          hint="Tableau de coordonnées [lat,lon] pour tracer la route sur la carte. Exemple : [[43.627,3.440],[43.654,3.360],[43.627,3.440]] — Copie depuis komoot.com ou Google Maps (clic droit → coordonnées)."
+        >
+          <textarea
+            value={waypointsRaw}
+            onChange={(e) => { setWaypointsRaw(e.target.value); setWaypointsError(null); }}
+            className="input min-h-[80px] font-mono text-xs"
+            placeholder='[[43.6271,3.4403],[43.6244,3.3675],[43.6271,3.4403]]'
+          />
+          {waypointsError && (
+            <span className="mt-1 block text-xs text-red-400">{waypointsError}</span>
+          )}
+        </Label>
         <Label label="Description">
           <textarea value={desc} onChange={(e) => setDesc(e.target.value)} className="input min-h-[100px]" placeholder="Café au point de RDV à 8h45, briefing, départ 9h..." />
         </Label>

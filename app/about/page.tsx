@@ -41,9 +41,20 @@ export default function AboutPage() {
       <div className="mt-12 rounded-2xl border border-flame-500/20 bg-flame-500/5 p-6">
         <h2 className="heading mb-3 text-2xl">Notre engagement Téléthon</h2>
         <p className="text-white/70">
-          Chaque année, le club roule pour le Téléthon. Une balade ouverte à tous, avec
-          inscriptions et dons reversés à l'AFM-Téléthon. C'est une fierté du club, et une tradition
-          qu'on perpétue depuis nos débuts.
+          Chaque année, le club roule pour le Téléthon. Baptêmes en moto, balade caritative ouverte
+          à tous — dons reversés à 100% à l'AFM-Téléthon. Une fierté du club depuis ses débuts.
+        </p>
+      </div>
+
+      <div className="mt-6 rounded-2xl border border-white/10 bg-ink-900/60 p-6 font-mono text-sm text-white/60">
+        <div className="mb-2 text-[10px] uppercase tracking-[0.2em] text-white/30">Siège social</div>
+        <p className="text-white/80">Association Moto Club Tourisme 2000</p>
+        <p>Maison Louis Blanc — 14 rue Louis Blanc</p>
+        <p>34800 Clermont-l'Hérault</p>
+        <p className="mt-2">
+          <a href="mailto:contact.mct2000@gmail.com" className="text-flame-400 hover:underline">
+            contact.mct2000@gmail.com
+          </a>
         </p>
       </div>
     </section>

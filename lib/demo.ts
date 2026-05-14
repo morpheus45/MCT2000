@@ -24,13 +24,12 @@ export const demoMe: DemoProfile = {
   id: "demo-user",
   pseudo: "Cédric",
   bike: "BMW R1250GS",
-  city: "Sud de la France",
-  // Note: la ville exacte n'est plus affichée dans le profil démo
+  city: "Clermont-l'Hérault",
   km: 78400,
   joined_year: 2015,
   avatar_url: null,
   bio:
-    "Routard du Languedoc, 10 ans dans le club. Passion : longs cols et cafés à 8h du matin avant le départ.",
+    "Routard du Languedoc, membre fondateur. Passion : longs cols et cafés à 8h du matin avant le départ. Président de 2018 à 2022.",
   role: "admin",
 };
 
@@ -176,6 +175,7 @@ export type DemoEvent = {
   going_count: number;
   photo_count?: number;
   my_status: string | null;
+  waypoints?: [number, number][] | null;
 };
 
 // ---------- Past outings (Sorties passées) ----------
@@ -346,29 +346,43 @@ export const demoPastOutings: DemoPastOuting[] = [
   // ── 2023 ──
   {
     id: "past-11",
-    title: "🎗 Téléthon 2023",
+    title: "🎗 Téléthon 2023 — Baptêmes & Balade caritative",
     date: "2023-12-02",
     year: 2023,
-    location: "Boucle caritative — 100 km",
+    location: "Allées Salengro, Clermont-l'Hérault",
     distance_km: 100,
     cover_image_url: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?q=80&w=1200&auto=format&fit=crop",
     photo_count: 36,
     going_count: 35,
-    description: null,
+    description: "Baptêmes en moto et balade caritative. Dons reversés à 100% à l'AFM-Téléthon.",
     source: "event",
     level: "Facile",
   },
   {
     id: "past-12",
-    title: "Road-trip Espagne — Costa Brava",
-    date: "2023-09-08",
+    title: "Sortie Lozère — Réserve de bisons d'Europe",
+    date: "2023-06-04",
     year: 2023,
-    location: "Gérone → Barcelone → retour",
-    distance_km: 620,
+    location: "Clermont → Lozère — Réserve de bisons",
+    distance_km: 230,
+    cover_image_url: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1200&auto=format&fit=crop",
+    photo_count: 24,
+    going_count: 19,
+    description: "Départ Allées Salengro à 9h. Une des plus belles sorties de l'année — bisons, cols, retour en fin d'après-midi.",
+    source: "event",
+    level: "Intermédiaire",
+  },
+  {
+    id: "past-13",
+    title: "Road-trip Espagne — Collioure & Costa Brava",
+    date: "2023-04-15",
+    year: 2023,
+    location: "Perpignan → Collioure → Gérone",
+    distance_km: 420,
     cover_image_url: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1200&auto=format&fit=crop",
-    photo_count: 61,
-    going_count: 8,
-    description: "3 jours en Espagne. La meilleure sortie de l'année selon le vote du club.",
+    photo_count: 48,
+    going_count: 10,
+    description: "Week-end de Pâques en Espagne. Collioure, Gérone, retour par la côte.",
     source: "event",
     level: "Confirmé",
   },
@@ -418,61 +432,103 @@ export const demoEvents: DemoEvent[] = [
   {
     id: "ev1",
     title: "Balade entre filles — Lac du Salagou",
-    description: "Sortie réservée aux motardes. Départ tranquille, pause photo et déj au bord du lac.",
+    description: "Sortie réservée aux motardes. Départ tranquille, pause photo et déj au bord du lac. RDV Allées Salengro, Clermont-l'Hérault.",
     starts_at: new Date(Date.now() + 86_400_000 * 12).toISOString(),
-    location: "Lac du Salagou — boucle",
+    location: "Allées Salengro → Lac du Salagou",
     distance_km: 60,
     level: "Facile",
     cover_image_url: "https://images.unsplash.com/photo-1572452571879-3d67d5b2a39f?q=80&w=1400&auto=format&fit=crop",
     going_count: 12,
     my_status: null,
+    waypoints: [
+      [43.6271, 3.4403], // Clermont — Allées Salengro
+      [43.6404, 3.4056],
+      [43.6530, 3.3900], // Liausson
+      [43.6680, 3.3395], // Octon
+      [43.6755, 3.3148],
+      [43.6510, 3.3060], // Salasc
+      [43.6244, 3.3254],
+      [43.6040, 3.4110], // Villeneuvette
+      [43.6271, 3.4403], // retour
+    ],
   },
   {
     id: "ev2",
     title: "Sortie dominicale — Cirque de Mourèze",
-    description: "Petit-déj' au café du marché à 8h, départ 9h.",
+    description: "Petit-déj' au café du marché à 8h, briefing, départ groupé 9h. Boucle Mourèze + Lac du Salagou. Retour vers 13h.",
     starts_at: new Date(Date.now() + 86_400_000 * 26).toISOString(),
-    location: "Départ place de la Mairie",
+    location: "Allées Salengro, Clermont-l'Hérault",
     distance_km: 90,
     level: "Facile",
     cover_image_url: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1400&auto=format&fit=crop",
     going_count: 18,
     my_status: "going",
+    waypoints: [
+      [43.6271, 3.4403],
+      [43.6040, 3.4110],
+      [43.6244, 3.3675], // Mourèze
+      [43.6510, 3.3060],
+      [43.6680, 3.3395],
+      [43.6404, 3.4056],
+      [43.6271, 3.4403],
+    ],
   },
   {
     id: "ev3",
     title: "Atelier mécanique — chaîne, pneus, freins",
-    description: "Apportez vos bécanes, on contrôle ensemble avant la saison.",
+    description: "Apportez vos bécanes, on contrôle ensemble avant la saison estivale. Conseils gratuits, prêt d'outillage.",
     starts_at: new Date(Date.now() + 86_400_000 * 40).toISOString(),
-    location: "Garage de Tonio, Béziers",
+    location: "Maison Louis Blanc, Clermont-l'Hérault",
     distance_km: null,
     level: "Tous niveaux",
     cover_image_url: "https://images.unsplash.com/photo-1611241893603-3c359704e0ee?q=80&w=1400&auto=format&fit=crop",
     going_count: 8,
     my_status: null,
+    waypoints: null,
   },
   {
     id: "ev4",
     title: "Road-trip week-end — Mont Aigoual & Cévennes",
-    description: "2 jours, 1 nuit en gîte. Cols, lacets, vues. 350 km au total.",
+    description: "2 jours, 1 nuit en gîte. Cols, lacets, vues. 350 km au total. Départ Clermont 8h.",
     starts_at: new Date(Date.now() + 86_400_000 * 60).toISOString(),
-    location: "Route → Meyrueis (Cévennes)",
+    location: "Clermont → Ganges → Aigoual → Meyrueis",
     distance_km: 350,
     level: "Confirmé",
     cover_image_url: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1400&auto=format&fit=crop",
     going_count: 14,
     my_status: null,
+    waypoints: [
+      [43.6271, 3.4403], // Clermont
+      [43.9358, 3.7068], // Ganges
+      [43.9929, 3.6062], // Le Vigan
+      [43.9773, 3.5427], // Col du Minier
+      [44.1219, 3.5811], // Mont Aigoual
+      [44.1797, 3.4272], // Meyrueis
+      [44.2189, 3.5594], // Col de Perjuret
+      [44.1797, 3.4272], // retour Meyrueis
+      [43.7319, 3.3206], // Lodève
+      [43.6271, 3.4403], // Clermont
+    ],
   },
   {
     id: "ev5",
-    title: "🎗 Téléthon — Balade caritative",
-    description: "Notre rendez-vous annuel. Inscription libre, dons reversés à 100% à l'AFM-Téléthon.",
-    starts_at: new Date(Date.UTC(new Date().getFullYear(), 11, 5, 9, 0)).toISOString(),
-    location: "Boucle caritative — 100 km",
+    title: "🎗 Téléthon MCT2000 — Baptêmes moto & Balade caritative",
+    description: "Notre rendez-vous annuel en faveur de l'AFM-Téléthon. Baptêmes en moto + balade caritative. Dons reversés à 100%. Allées Salengro, 9h-18h.",
+    starts_at: new Date(Date.UTC(new Date().getFullYear(), 10, 29, 9, 0)).toISOString(), // fin novembre
+    location: "Allées Salengro, Clermont-l'Hérault",
     distance_km: 100,
     level: "Facile",
     cover_image_url: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?q=80&w=1400&auto=format&fit=crop",
     going_count: 42,
     my_status: "going",
+    waypoints: [
+      [43.6271, 3.4403], // Clermont
+      [43.6530, 3.3900],
+      [43.6680, 3.3395], // Octon
+      [43.6510, 3.3060], // Salasc
+      [43.5900, 3.3500], // vers Bédarieux
+      [43.6010, 3.4600],
+      [43.6271, 3.4403], // retour
+    ],
   },
 ];
